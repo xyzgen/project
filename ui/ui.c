@@ -811,11 +811,6 @@ lv_disp_set_theme(dispp, theme);
 
 ui_standby_screen_init();
 ui_main_screen_init();
-ui_light_screen_init();
-ui_pump_screen_init();
-ui_heater_screen_init();
-ui_aroma_screen_init();
-ui_feed_screen_init();
 ui____initial_actions0 = lv_obj_create(NULL);
 lv_disp_load_scr( ui_standby);
 }
