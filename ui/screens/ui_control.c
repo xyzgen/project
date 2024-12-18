@@ -1,6 +1,7 @@
 ﻿#include "../ui.h"
 
 typedef struct mod {
+    uint8_t* flag;
     char name[10];
     void* img;
     void (*event)(void *e);
@@ -9,16 +10,16 @@ typedef struct mod {
 
 static mod_t mod[10] =
 {
-    {"温度", &ui_img_temp_png, ui_event_tempBtn},
-    {"水位", &ui_img_level_png, ui_event_waterLevelBtn},
-    {"水泵", &ui_img_pump_png, ui_event_waterPumpBtn},
-    {"灯光", &ui_img_light_png, ui_event_lighterBtn},
-    {"更多", &ui_img_more_png, ui_event_moreBtn},
-    {"加热棒", &ui_img_heater_png, ui_event_heaterBtn},
-    {"杀菌灯", &ui_img_light_png, ui_event_lighterBtn},
-    {"香薰", &ui_img_aroma_png, ui_event_AromatherapyBtn},
-    {"喂食器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
-    {"蛋分器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
+    {0,"温度", &ui_img_temp_png, ui_event_tempBtn},
+    {0,"水位", &ui_img_level_png, ui_event_waterLevelBtn},
+    {0,"水泵", &ui_img_pump_png, ui_event_waterPumpBtn},
+    {0,"灯光", &ui_img_light_png, ui_event_lighterBtn},
+    {0,"更多", &ui_img_more_png, ui_event_moreBtn},
+    {0,"加热棒", &ui_img_heater_png, ui_event_heaterBtn},
+    {0,"杀菌灯", &ui_img_light_png, ui_event_lighterBtn},
+    {0,"香薰", &ui_img_aroma_png, ui_event_AromatherapyBtn},
+    {0,"喂食器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
+    {0,"蛋分器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
 };
 
 typedef struct module
@@ -36,6 +37,7 @@ static void module_add_node(mod_t *new_mod)
     module_t* pos;
     module_t* new_module = malloc(sizeof(module_t));
     new_module->mod = new_mod;
+    new_mod->flag = 1;
     for (pos = module;pos->next != module;pos = pos->next) { ; }
     new_module->next = pos->next;
     pos->next = new_module;
@@ -45,6 +47,7 @@ static module_t* module_ins_node(module_t* ins_mod,int i)
 {
     module_t* new_module = malloc(sizeof(module_t));
     new_module->mod = &mod[i];
+    mod[i].flag = 1;
     new_module->next = ins_mod->next;
     ins_mod->next = new_module;
     return new_module;
@@ -60,6 +63,7 @@ static void module_del_node(int i)
         {
             p_pos->next = pos->next;
             free(pos);
+            mod[i].flag = 0;
             break;
         }
     }
@@ -140,7 +144,10 @@ static void ui_addBtn_cb(lv_event_t* e)
     for(int i = 0;i<8;i++)
     {
         if (more_flag & 0x1 << i)
-            pos = module_ins_node(pos, i + 5);
+        {
+            if (!(mod[i + 5].flag))
+                pos = module_ins_node(pos, i + 5);
+        }
         else
             module_del_node(i+5);
     }
