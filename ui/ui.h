@@ -64,6 +64,7 @@ extern lv_obj_t* ui_mainInfoLab;
 
 //SCREEN:ui_QR
 void ui_QR_screen_init(void);
+void ui_event_QR(lv_event_t* e);
 extern lv_obj_t* ui_QR;
 
 // SCREEN: ui_control

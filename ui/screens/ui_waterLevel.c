@@ -3,7 +3,7 @@
 #define HIGHT 10
 
 static int get_water_level(void);
-static void water_level_anim_cb(lv_anim_t* a, int32_t v);
+static void water_level_anim_cb(void* var, int32_t v);
 static void hidden_cb(void* arg);
 static void timer_cb(lv_timer_t* timer);
 static int hight[7] = { HIGHT * 2,HIGHT,HIGHT,HIGHT*2,HIGHT*3,HIGHT * 4,HIGHT * 3};

@@ -45,6 +45,7 @@ lv_obj_t* ui_mainInfoLab;
 
 //SCREEN:ui_QR
 void ui_QR_screen_init(void);
+void ui_event_QR(lv_event_t* e);
 lv_obj_t* ui_QR;
 
 // SCREEN: ui_control
@@ -320,6 +321,7 @@ void ui_event_main(lv_event_t* e) {
         _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_main_screen_init);
         flag = false;
     }
+
 }
 
 //小程序<=主页=>温度界面
@@ -408,6 +410,17 @@ void ui_event_moreBtn(lv_event_t* e) {
     }
 }
 
+//二维码=>主页界面
+void ui_event_QR(lv_event_t* e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if (event_code == LV_EVENT_CLICKED) {
+        flag = true;
+        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_main_screen_init);
+    }
+}
+
+//控制<=更多=>控制
 void ui_event_more(lv_event_t* e) {
 
     lv_event_code_t event_code = lv_event_get_code(e);

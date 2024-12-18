@@ -5,27 +5,44 @@
 
 #include "../ui.h"
 
-
+static const char* QR_to[] = {"小程序","抖音","快手","小红书"};
+static int QR_index=0;
 
 void ui_QR_screen_init(void)
 {
     ui_QR = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_QR, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-    set_background(ui_QR);
+    lv_obj_set_style_bg_color(ui_QR, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_QR, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     lv_color_t bg_color = lv_palette_lighten(LV_PALETTE_GREY, 5);
     lv_color_t fg_color = lv_palette_darken(LV_PALETTE_NONE, 4);
 
-    lv_obj_t* qr = lv_qrcode_create(ui_QR);
-    lv_qrcode_set_size(qr, 150);
-    lv_qrcode_set_dark_color(qr, fg_color);
-    lv_qrcode_set_light_color(qr, bg_color);
-    
-    /*Set data*/
-    const char* data = "#小程序://蓝得之家/DYmDGanz1rW2oTu";
-    lv_qrcode_update(qr, data, strlen(data));
-    lv_obj_center(qr);
+    lv_obj_t* tv = lv_tileview_create(ui_QR);
+    lv_obj_set_size(tv, 300, 300);
+    lv_obj_align(tv, LV_ALIGN_CENTER, 0, 60);
+    lv_obj_set_style_bg_opa(tv, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    /*Add a border with bg_color*/
-    lv_obj_set_style_border_color(qr, bg_color, 0);
-    lv_obj_set_style_border_width(qr, 5, 0);
+    for(int i=0;i<4;i++)
+    {
+        lv_obj_t* tile1 = lv_tileview_add_tile(tv, i, 0, (i<4?LV_DIR_RIGHT:0) | (i>0?LV_DIR_LEFT:0));
+        lv_obj_t* qr = lv_qrcode_create(tile1);
+        lv_qrcode_set_size(qr, 150);
+        lv_obj_set_size(qr, 150, 150);
+        lv_qrcode_set_dark_color(qr, fg_color);
+        lv_qrcode_set_light_color(qr, bg_color);
+        lv_qrcode_update(qr, QR_to[i], strlen(QR_to[i]));
+        lv_obj_set_align(qr,LV_ALIGN_TOP_MID);
+        lv_obj_set_style_border_color(qr, bg_color, 0);
+        lv_obj_set_style_border_width(qr, 5, 0);
+        lv_obj_t* label = lv_label_create(tile1);
+        lv_label_set_text(label, QR_to[i]);
+        lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(label, &ui_font_Chinese16B, LV_PART_MAIN);
+        lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 166);
+    }
+
+    lv_obj_add_event_cb(ui_QR, ui_event_main, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_QR, ui_event_QR, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_QR, ui_event_status, LV_EVENT_ALL, NULL);
 }
