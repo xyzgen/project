@@ -80,7 +80,10 @@ extern lv_obj_t* ui_controlList;
 
 // SCREEN: ui_more
 void ui_more_screen_init(void);
+void ui_event_more(lv_event_t* e);
 extern lv_obj_t* ui_more;
+extern lv_obj_t* ui_moreList;
+extern uint8_t more_flag;
 
 // SCREEN: ui_temp
 void ui_temp_screen_init(void);

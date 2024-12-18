@@ -54,7 +54,6 @@ static void timer_cb(lv_timer_t* timer) {
         lv_obj_remove_flag(ui_waterLevelPanel[i], LV_OBJ_FLAG_HIDDEN);
         lv_obj_set_width(ui_waterLevelPanel[i],5);
         lv_obj_set_style_border_width(ui_waterLevelPanel[i], 0,LV_PART_MAIN | LV_STATE_DEFAULT);
-        //lv_obj_set_height(ui_waterLevelPanel[i],hight[i%7]);
         lv_obj_set_x(ui_waterLevelPanel[i], (i-8)*12);
         lv_anim_t a;
         lv_anim_init(&a);

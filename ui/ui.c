@@ -55,7 +55,10 @@ lv_obj_t* ui_controlList;
 
 // SCREEN: ui_more
 void ui_more_screen_init(void);
+void ui_event_more(lv_event_t* e);
 lv_obj_t* ui_more;
+lv_obj_t* ui_moreList;
+uint8_t more_flag;
 
 // SCREEN: ui_temp
 void ui_temp_screen_init(void);
@@ -402,6 +405,18 @@ void ui_event_moreBtn(lv_event_t* e) {
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
         _ui_screen_change(&ui_more, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_more_screen_init);
+    }
+}
+
+void ui_event_more(lv_event_t* e) {
+
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
+        _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
+    }
+    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
+       _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_control_screen_init);
     }
 }
 

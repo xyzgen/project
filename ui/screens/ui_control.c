@@ -7,16 +7,18 @@ typedef struct mod {
 
 }mod_t;
 
-static mod_t mod[8] =
+static mod_t mod[10] =
 {
     {"温度", &ui_img_temp_png, ui_event_tempBtn},
     {"水位", &ui_img_level_png, ui_event_waterLevelBtn},
     {"水泵", &ui_img_pump_png, ui_event_waterPumpBtn},
     {"灯光", &ui_img_light_png, ui_event_lighterBtn},
-    {"更多", &ui_img_more_png, ui_event_lighterBtn},
+    {"更多", &ui_img_more_png, ui_event_moreBtn},
     {"加热棒", &ui_img_heater_png, ui_event_heaterBtn},
     {"杀菌灯", &ui_img_light_png, ui_event_lighterBtn},
     {"香薰", &ui_img_aroma_png, ui_event_AromatherapyBtn},
+    {"喂食器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
+    {"蛋分器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
 };
 
 typedef struct module
@@ -27,6 +29,8 @@ typedef struct module
 
 static module_t* module;
 
+static void ui_addBtn_cb(lv_event_t* e);
+
 static void module_add_node(mod_t *new_mod)
 {
     module_t* pos;
@@ -35,6 +39,30 @@ static void module_add_node(mod_t *new_mod)
     for (pos = module;pos->next != module;pos = pos->next) { ; }
     new_module->next = pos->next;
     pos->next = new_module;
+}
+
+static module_t* module_ins_node(module_t* ins_mod,int i)
+{
+    module_t* new_module = malloc(sizeof(module_t));
+    new_module->mod = &mod[i];
+    new_module->next = ins_mod->next;
+    ins_mod->next = new_module;
+    return new_module;
+}
+
+static void module_del_node(int i)
+{
+    module_t* pos = module;
+    module_t* p_pos = pos;
+    for (pos;pos->next != module;p_pos = pos,pos = pos->next)
+    {
+        if(pos->mod == &mod[i])
+        {
+            p_pos->next = pos->next;
+            free(pos);
+            break;
+        }
+    }
 }
 
 static void module_init(void)
@@ -97,12 +125,50 @@ void ui_control_screen_init(void)
         lv_obj_set_align(ui_listImg, LV_ALIGN_LEFT_MID);
         lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags
         lv_obj_remove_flag(ui_listImg, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-        //lv_obj_set_style_radius(ui_listImg, 16, LV_PART_MAIN | LV_STATE_DEFAULT);
-        //lv_obj_set_style_bg_color(ui_listImg, lv_color_hex(0x1D469E), LV_PART_MAIN | LV_STATE_DEFAULT);
-        //lv_obj_set_style_bg_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_image_recolor(ui_listImg, lv_color_hex(LANDE), LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
     }
     lv_obj_add_event_cb(ui_control, ui_event_status, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_control, ui_addBtn_cb, LV_EVENT_SCREEN_LOADED, NULL);
+}
+
+static void ui_addBtn_cb(lv_event_t* e)
+{
+    module_t* pos;
+    for (pos = module;pos->next->next != module;pos = pos->next) { ; }
+    for(int i = 0;i<8;i++)
+    {
+        if (more_flag & 0x1 << i)
+            pos = module_ins_node(pos, i + 5);
+        else
+            module_del_node(i+5);
+    }
+
+    lv_obj_clean(ui_controlList);
+
+    for (pos = module->next;pos != module;pos = pos->next) {
+        lv_obj_t* ui_listBtn = lv_button_create(ui_controlList);
+        lv_obj_set_align(ui_listBtn, LV_ALIGN_CENTER);
+        lv_obj_set_size(ui_listBtn, lv_pct(100), lv_pct(20));
+        lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
+        lv_obj_remove_flag(ui_listBtn, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
+        lv_obj_set_style_bg_color(ui_listBtn, lv_color_hex(0x909090), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_opa(ui_listBtn, 127, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+        lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
+        lv_obj_align(ui_listBtnLab, LV_ALIGN_LEFT_MID, 32, 0);
+        lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
+        lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+        lv_obj_t* ui_listImg = lv_image_create(ui_listBtn);
+        lv_image_set_src(ui_listImg, pos->mod->img);
+        lv_obj_set_align(ui_listImg, LV_ALIGN_LEFT_MID);
+        lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags
+        lv_obj_remove_flag(ui_listImg, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
+        lv_obj_set_style_image_recolor(ui_listImg, lv_color_hex(LANDE), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
+    }
 }
