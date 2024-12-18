@@ -47,7 +47,7 @@ static void module_init(void)
     }
 }
 
-void ui_control_screen_init(void)
+void ui_more_screen_init(void)
 {
     module_init();
     ui_control = lv_obj_create(NULL);
