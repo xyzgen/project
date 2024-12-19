@@ -5,6 +5,7 @@
 
 #include "../ui.h"
 #include <vector>
+#include <chrono>
 
 
 
@@ -17,11 +18,12 @@ enum class led_pin_code_t {
     blue_led = 2,
     white_led = 3,
     yellow_led = 4,
-    heater = 5,
-    feeder = 6,
-    aroma = 7,
-    sanitizer = 8,
-    pro_isolator = 9
+    pump = 5,
+    heater = 6,
+    feeder = 7,
+    aroma = 8,
+    sanitizer = 9,
+    pro_isolator = 10
 };
 struct pin_set
 {
@@ -39,6 +41,7 @@ const uint8_t led_correspond_pin[] = {
     0,  // 7
     0,  // 8
     0,  // 9
+    0,  // 10
 };
 
 struct led_strategy_t
@@ -57,7 +60,7 @@ struct led_strategy_t
 
     std::vector<pin_set> ps;
 };
-static std::vector<led_strategy_t> strat;
+static std::vector<led_strategy_t> g_strat;
 struct led_tmp_t {
     uint8_t pin_code;
     uint8_t value;
@@ -71,6 +74,22 @@ struct led_filter {
     inline static uint8_t target[sum] = {};
     led_filter() = delete;
 };
+static uint32_t getSecsDay()
+{
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+
+    std::tm local_tm = *std::localtime(&now_time_t);
+
+    local_tm.tm_hour = 0;
+    local_tm.tm_min = 0;
+    local_tm.tm_sec = 0;
+
+    auto today_midnight = std::chrono::system_clock::from_time_t(std::mktime(&local_tm));
+
+    return std::chrono::duration_cast<std::chrono::seconds>(now - today_midnight).count();
+}
 
 
 
@@ -88,6 +107,7 @@ static uint8_t scr_where = 0;
 static lv_obj_t* title[2];
 static lv_obj_t* titleIcon[2];
 static lv_obj_t* strat_list[2];
+static bool isEnabled = false;
 
 static void rerender();
 extern "C" static void ui_strat_temp_cb(lv_event_t* e);
@@ -95,6 +115,13 @@ extern "C" static void ui_strat_add_cb(lv_event_t* e);
 
 extern "C" void ui_strat_screen_init(void)
 {
+    g_strat.push_back({});
+    g_strat.push_back({});
+    g_strat.push_back({});
+    g_strat.push_back({});
+    g_strat.push_back({});
+    g_strat.push_back({});
+    g_strat.push_back({});
     for (int ind = 0; ind < 2; ind++)
     {
         ui_strat[ind] = lv_obj_create(NULL);
@@ -127,13 +154,12 @@ extern "C" void ui_strat_screen_init(void)
         lv_obj_align(titleIcon[ind], LV_ALIGN_TOP_RIGHT, -16, 5);
         lv_obj_add_flag(titleIcon[ind], LV_OBJ_FLAG_CLICKABLE);
         lv_obj_remove_flag(titleIcon[ind], LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_set_style_image_recolor(titleIcon[ind], lv_color_hex(LANDE), LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_image_recolor_opa(titleIcon[ind], 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* addBtn = lv_button_create(ui_strat[ind]);
         lv_obj_set_size(addBtn, 50, 50);
         lv_obj_set_style_bg_opa(addBtn, LV_OPA_TRANSP, LV_PART_MAIN);
-        lv_obj_align(addBtn, LV_ALIGN_BOTTOM_RIGHT, -16, -16);
+        lv_obj_align(addBtn, LV_ALIGN_BOTTOM_RIGHT, -5, -5);
         lv_obj_set_style_shadow_width(addBtn, 0, LV_PART_MAIN);
         lv_obj_t* addIcon = lv_label_create(addBtn);
         lv_label_set_text(addIcon, "+");
@@ -147,6 +173,11 @@ extern "C" void ui_strat_screen_init(void)
     }
 }
 
+extern "C" static void ui_strat_detail_click_cb(lv_event_t* e)
+{
+
+}
+
 extern "C" static void ui_strat_temp_cb(lv_event_t* e)
 {
 
@@ -157,7 +188,7 @@ extern "C" static void ui_strat_add_cb(lv_event_t* e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if (event_code == LV_EVENT_CLICKED)
-        _ui_screen_change(&ui_stratDetail, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_stratDetail_screen_init);
+        _ui_screen_change(&ui_stratDetail, LV_SCR_LOAD_ANIM_OVER_TOP, 300, 0, &ui_stratDetail_screen_init);
 }
 
 extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t anim)
@@ -175,66 +206,90 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
     }
 
     //re-render strategy screen
+    isEnabled = false;
     switch (m)
     {
     case ui_strat_mode_light:
         lv_label_set_text(title[scr_where], "灯光");
         lv_image_set_src(titleIcon[scr_where], &ui_img_lightboard_png);
+        if (led_filter::value[(char)led_pin_code_t::red_led] && led_filter::value[(char)led_pin_code_t::green_led] && led_filter::value[(char)led_pin_code_t::blue_led])
+            isEnabled = true;
         break;
     case ui_strat_mode_pump:
         lv_label_set_text(title[scr_where], "水泵");
         lv_image_set_src(titleIcon[scr_where], &ui_img_pump_png);
+        if (led_filter::value[(char)led_pin_code_t::pump])
+            isEnabled = true;
         break;
     case ui_strat_mode_heat:
         lv_label_set_text(title[scr_where], "加热器");
         lv_image_set_src(titleIcon[scr_where], &ui_img_heater_png);
+        if (led_filter::value[(char)led_pin_code_t::heater])
+            isEnabled = true;
         break;
     case ui_strat_mode_feed:
         lv_label_set_text(title[scr_where], "喂食器");
         lv_image_set_src(titleIcon[scr_where], &ui_img_feed_png);
+        if (led_filter::value[(char)led_pin_code_t::feeder])
+            isEnabled = true;
         break;
     case ui_strat_mode_aroma:
         lv_label_set_text(title[scr_where], "香薰");
         lv_image_set_src(titleIcon[scr_where], &ui_img_aroma_png);
+        if (led_filter::value[(char)led_pin_code_t::aroma])
+            isEnabled = true;
         break;
     case ui_strat_mode_sanit:
         lv_label_set_text(title[scr_where], "杀菌灯");
-        lv_image_set_src(titleIcon[scr_where], &ui_img_light_png);
+        lv_image_set_src(titleIcon[scr_where], &ui_img_uv_png);
+        if (led_filter::value[(char)led_pin_code_t::sanitizer])
+            isEnabled = true;
         break;
     case ui_strat_mode_isola:
         lv_label_set_text(title[scr_where], "蛋分器");
-        lv_image_set_src(titleIcon[scr_where], &ui_img_heater_png);
+        lv_image_set_src(titleIcon[scr_where], &ui_img_decom_png);
+        if (led_filter::value[(char)led_pin_code_t::pro_isolator])
+            isEnabled = true;
         break;
     }
 
-
-
     lv_obj_clean(strat_list[scr_where]);
 
-    //for (pos = module->next; pos != module; pos = pos->next) {
-    //    lv_obj_t* ui_listBtn = lv_button_create(ui_controlList);
-    //    lv_obj_set_align(ui_listBtn, LV_ALIGN_CENTER);
-    //    lv_obj_set_size(ui_listBtn, lv_pct(100), lv_pct(20));
-    //    lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
-    //    lv_obj_remove_flag(ui_listBtn, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-    //    lv_obj_set_style_bg_color(ui_listBtn, lv_color_hex(0x909090), LV_PART_MAIN | LV_STATE_DEFAULT);
-    //    lv_obj_set_style_bg_opa(ui_listBtn, 127, LV_PART_MAIN | LV_STATE_DEFAULT);
-    //    lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    auto& strat = g_strat;
+    for (auto& st : strat) {
+        lv_obj_t* ui_listBtn = lv_button_create(strat_list[scr_where]);
+        lv_obj_set_align(ui_listBtn, LV_ALIGN_CENTER);
+        lv_obj_set_size(ui_listBtn, lv_pct(100), lv_pct(20));
+        lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
+        lv_obj_remove_flag(ui_listBtn, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
+        lv_obj_set_style_bg_color(ui_listBtn, lv_color_hex(0x909090), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_opa(ui_listBtn, 127, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    //    lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
-    //    lv_obj_align(ui_listBtnLab, LV_ALIGN_LEFT_MID, 32, 0);
-    //    lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
-    //    lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
+        lv_obj_align(ui_listBtnLab, LV_ALIGN_TOP_LEFT, 32, 0);
+        //lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
+        lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    //    lv_obj_t* ui_listImg = lv_image_create(ui_listBtn);
-    //    lv_image_set_src(ui_listImg, pos->mod->img);
-    //    lv_obj_set_align(ui_listImg, LV_ALIGN_LEFT_MID);
-    //    lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags
-    //    lv_obj_remove_flag(ui_listImg, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-    //    lv_obj_set_style_image_recolor(ui_listImg, lv_color_hex(LANDE), LV_PART_MAIN | LV_STATE_DEFAULT);
-    //    lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    //    lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
-    //}
+        ui_listBtnLab = lv_label_create(ui_listBtn);
+        lv_obj_align(ui_listBtnLab, LV_ALIGN_BOTTOM_LEFT, 32, 0);
+        //lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
+        lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+        lv_obj_t* switch_btn = lv_switch_create(ui_listBtn);
+        lv_obj_align(switch_btn, LV_ALIGN_RIGHT_MID, 0, 0);
+
+        lv_obj_add_event_cb(ui_listBtn, ui_strat_detail_click_cb, LV_EVENT_ALL, NULL);
+    }
+
+    if (isEnabled)
+    {
+        lv_obj_set_style_image_recolor(titleIcon[scr_where], lv_color_hex(LANDE), LV_PART_MAIN | LV_STATE_DEFAULT);
+    }
+    else
+    {
+        lv_obj_set_style_image_recolor(titleIcon[scr_where], lv_color_hex(0xaaaaaa), LV_PART_MAIN | LV_STATE_DEFAULT);
+    }
 }
 
 static void rerender()
