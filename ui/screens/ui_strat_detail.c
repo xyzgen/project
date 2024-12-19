@@ -159,8 +159,10 @@ static void weekday_picker_cancel_event_cb(lv_event_t* e) {
 
 void ui_stratDetail_screen_init(void)
 {
+    ui_stratDetail = lv_obj_create(NULL);
+
     // 创建最上面的“开始时间”和“结束时间”按钮
-    lv_obj_t* time_container = lv_obj_create(lv_scr_act());
+    lv_obj_t* time_container = lv_obj_create(ui_stratDetail);
     lv_obj_set_size(time_container, LV_HOR_RES, 60);
     lv_obj_align(time_container, LV_ALIGN_TOP_MID, 0, 10);
 
@@ -183,7 +185,7 @@ void ui_stratDetail_screen_init(void)
     lv_label_set_text(end_label, "结束时间");
 
     // 中间的“星期策略”按钮
-    lv_obj_t* weekday_container = lv_obj_create(lv_scr_act());
+    lv_obj_t* weekday_container = lv_obj_create(ui_stratDetail);
     lv_obj_set_size(weekday_container, LV_HOR_RES, 60);
     lv_obj_align(weekday_container, LV_ALIGN_TOP_MID, 0, 80);
 
@@ -196,7 +198,7 @@ void ui_stratDetail_screen_init(void)
     lv_label_set_text(weekday_label, "星期策略");
 
     // 底部的滑动条
-    lv_obj_t* slider = lv_slider_create(lv_scr_act());
+    lv_obj_t* slider = lv_slider_create(ui_stratDetail);
     lv_obj_set_size(slider, 240, 20);
     lv_obj_align(slider, LV_ALIGN_BOTTOM_MID, 0, -20);
     lv_slider_set_range(slider, 0, 100);  // 设置滑动条的范围

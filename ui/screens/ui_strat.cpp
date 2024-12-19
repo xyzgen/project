@@ -154,7 +154,10 @@ extern "C" static void ui_strat_temp_cb(lv_event_t* e)
 
 extern "C" static void ui_strat_add_cb(lv_event_t* e)
 {
-    _ui_screen_change(&ui_stratDetail, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_stratDetail_screen_init);
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if (event_code == LV_EVENT_CLICKED)
+        _ui_screen_change(&ui_stratDetail, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_stratDetail_screen_init);
 }
 
 extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t anim)
