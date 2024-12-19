@@ -1,8 +1,4 @@
-SET(SOURCES screens/ui_main.c
-    screens/ui_light.c
-    screens/ui_light1.c
-    screens/ui_pump.c
-    screens/ui_pump1.c
+﻿SET(SOURCES screens/ui_main.c
     ui_theme_manager.c
     ui_themes.c
     ui.c

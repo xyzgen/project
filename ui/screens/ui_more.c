@@ -8,19 +8,11 @@ typedef struct mmod {
 
 static mmod_t mmod[5] =
 {
-<<<<<<< Updated upstream
-    {0x01,"加热棒", &ui_img_heater_png},
-    {0x02,"杀菌灯", &ui_img_lamp_png},
-    {0x04,"香薰", &ui_img_aroma_png},
-    {0x08,"喂食器", &ui_img_feed_png},
-    {0x10,"蛋分器", &ui_img_decom_png},
-=======
     {ui_strat_mode_heat,"加热棒", &ui_img_heater_png},
-    {ui_strat_mode_sanit,"杀菌灯", &ui_img_light_png},
+    {ui_strat_mode_sanit,"杀菌灯", &ui_img_uv_png },
     {ui_strat_mode_aroma,"香薰", &ui_img_aroma_png},
-    {ui_strat_mode_feed,"喂食器", &ui_img_aroma_png},
-    {ui_strat_mode_isola,"蛋分器", &ui_img_aroma_png},
->>>>>>> Stashed changes
+    {ui_strat_mode_feed,"喂食器", &ui_img_feed_png },
+    {ui_strat_mode_isola,"蛋分器", &ui_img_decom_png }
 };
 
 static void ui_choose_cb(lv_event_t* code);
@@ -64,13 +56,7 @@ void ui_more_screen_init(void)
         lv_obj_set_style_bg_opa(ui_listLab, 127, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_shadow_opa(ui_listLab, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-<<<<<<< Updated upstream
-        lv_label_set_text_fmt(ui_listLab, "\n              %s", pos->mmod->name);
-        lv_obj_set_style_text_align(ui_listLab, LV_IMAGE_ALIGN_BOTTOM_LEFT, LV_PART_MAIN);
-=======
-        lv_label_set_text_fmt(ui_listLab, "     %s", mmod[i].name);
-        lv_obj_set_style_text_align(ui_listLab, LV_ALIGN_LEFT_MID, LV_PART_MAIN);
->>>>>>> Stashed changes
+        lv_label_set_text_fmt(ui_listLab, "\n              %s", mmod[i].name);
         lv_obj_set_style_text_color(ui_listLab, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_text_font(ui_listLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
 

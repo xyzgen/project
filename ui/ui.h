@@ -77,11 +77,8 @@ void ui_event_waterPumpBtn(lv_event_t* e);
 void ui_event_moreBtn(lv_event_t* e);
 void ui_event_AromatherapyBtn(lv_event_t* e);
 void ui_event_feederBtn(lv_event_t* e);
-<<<<<<< Updated upstream
-=======
 void ui_event_sanitizerBtn(lv_event_t* e);
 void ui_event_isolatorBtn(lv_event_t* e);
->>>>>>> Stashed changes
 extern lv_obj_t* ui_control;
 extern lv_obj_t* ui_controlList;
 
@@ -148,7 +145,7 @@ LV_IMG_DECLARE( ui_img_feed_png);   // assets/feed.png
 LV_IMG_DECLARE( ui_img_level_png);   // assets/level.png
 LV_IMG_DECLARE( ui_img_aroma_png);   // assets/aroma.png
 LV_IMG_DECLARE(ui_img_decom_png);   // assets/decom.png
-LV_IMG_DECLARE( ui_img_lamp_png);   // assets/lamp.png
+LV_IMG_DECLARE( ui_img_uv_png);   // assets/lamp.png
 LV_IMG_DECLARE( ui_img_off_png);   // assets/off.png
 LV_IMG_DECLARE(ui_img_temp_png);   // assets/temp.png
 LV_IMG_DECLARE(ui_img_bright_png);   // assets/bright.png

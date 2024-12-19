@@ -2832,7 +2832,6 @@
     <ClCompile Include="..\ui\images\ui_img_decom_png.c" />
     <ClCompile Include="..\ui\images\ui_img_feed_png.c" />
     <ClCompile Include="..\ui\images\ui_img_heater_png.c" />
-    <ClCompile Include="..\ui\images\ui_img_lamp_png.c" />
     <ClCompile Include="..\ui\images\ui_img_level_png.c" />
     <ClCompile Include="..\ui\images\ui_img_lightboard_png.c" />
     <ClCompile Include="..\ui\images\ui_img_light_png.c" />
@@ -2844,6 +2843,7 @@
     <ClCompile Include="..\ui\images\ui_img_pump_shell_png.c" />
     <ClCompile Include="..\ui\images\ui_img_setup_png.c" />
     <ClCompile Include="..\ui\images\ui_img_temp_png.c" />
+    <ClCompile Include="..\ui\images\ui_img_uv_png.c" />
     <ClCompile Include="..\ui\screens\ui_control.c" />
     <ClCompile Include="..\ui\screens\ui_main.c" />
     <ClCompile Include="..\ui\screens\ui_more.c" />

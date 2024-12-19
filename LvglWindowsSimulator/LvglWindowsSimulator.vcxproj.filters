@@ -3932,12 +3932,12 @@
     <ClCompile Include="..\ui\screens\ui_more.c">
       <Filter>lvgl\ui\screens</Filter>
     </ClCompile>
-<<<<<<< Updated upstream
     <ClCompile Include="..\ui\images\ui_img_lamp_png.c">
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
     <ClCompile Include="..\ui\images\ui_img_decom_png.c">
-=======
+      <Filter>lvgl\ui\images</Filter>
+    </ClCompile>
     <ClCompile Include="..\ui\screens\ui_strat_detail.c">
       <Filter>lvgl\ui\screens</Filter>
     </ClCompile>
@@ -3951,7 +3951,6 @@
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
     <ClCompile Include="..\ui\images\ui_img_pump_shell_png.c">
->>>>>>> Stashed changes
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
   </ItemGroup>

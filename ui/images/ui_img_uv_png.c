@@ -1,4 +1,4 @@
-#ifdef __has_include
+﻿#ifdef __has_include
     #if __has_include("lvgl.h")
         #ifndef LV_LVGL_H_INCLUDE_SIMPLE
             #define LV_LVGL_H_INCLUDE_SIMPLE
@@ -89,7 +89,7 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMAGE_UI_IMG_
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1b, 0x37, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 };
 
-const lv_image_dsc_t ui_img_lamp_png = {
+const lv_image_dsc_t ui_img_uv_png = {
   .header.cf = LV_COLOR_FORMAT_RGB565A8,
   .header.magic = LV_IMAGE_HEADER_MAGIC,
   .header.w = 32,
