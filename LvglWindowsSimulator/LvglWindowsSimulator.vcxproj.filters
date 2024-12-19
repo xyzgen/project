@@ -3890,22 +3890,7 @@
     <ClCompile Include="..\ui\images\ui_img_setup_png.c">
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\screens\ui_aroma.c">
-      <Filter>lvgl\ui\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ui\screens\ui_feed.c">
-      <Filter>lvgl\ui\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ui\screens\ui_heater.c">
-      <Filter>lvgl\ui\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ui\screens\ui_light.c">
-      <Filter>lvgl\ui\screens</Filter>
-    </ClCompile>
     <ClCompile Include="..\ui\screens\ui_main.c">
-      <Filter>lvgl\ui\screens</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ui\screens\ui_pump.c">
       <Filter>lvgl\ui\screens</Filter>
     </ClCompile>
     <ClCompile Include="..\ui\images\ui_img_main_png.c">
@@ -3947,10 +3932,26 @@
     <ClCompile Include="..\ui\screens\ui_more.c">
       <Filter>lvgl\ui\screens</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="..\ui\images\ui_img_lamp_png.c">
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
     <ClCompile Include="..\ui\images\ui_img_decom_png.c">
+=======
+    <ClCompile Include="..\ui\screens\ui_strat_detail.c">
+      <Filter>lvgl\ui\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\screens\ui_strat.cpp">
+      <Filter>lvgl\ui\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\images\ui_img_lightboard_png.c">
+      <Filter>lvgl\ui\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\images\ui_img_pump_fan_png.c">
+      <Filter>lvgl\ui\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\images\ui_img_pump_shell_png.c">
+>>>>>>> Stashed changes
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
   </ItemGroup>

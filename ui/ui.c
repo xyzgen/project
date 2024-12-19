@@ -50,7 +50,7 @@ lv_obj_t* ui_QR;
 
 // SCREEN: ui_control
 void ui_control_screen_init(void);
-bool flag = false;
+bool flag = false;      //where is the screen from? control(true) or main(false)
 lv_obj_t* ui_control;
 lv_obj_t* ui_controlList;
 
@@ -59,7 +59,6 @@ void ui_more_screen_init(void);
 void ui_event_more(lv_event_t* e);
 lv_obj_t* ui_more;
 lv_obj_t* ui_moreList;
-uint8_t more_flag;
 
 // SCREEN: ui_temp
 void ui_temp_screen_init(void);
@@ -77,150 +76,13 @@ void ui_event_waterLevel(lv_event_t* e);
 lv_obj_t* ui_waterLevel;
 lv_obj_t* ui_waterLevelLab;
 
-
-// SCREEN: ui_light
-int lightMode = 0;
-const char *lightModeArr[6] = {"氛围","观影","浪漫","星空","日常","关闭"};
-void ui_light_screen_init(void);
-void ui_event_light( lv_event_t * e);
-lv_obj_t *ui_light;
-void ui_event_lightPer( lv_event_t * e);
-lv_obj_t *ui_lightPer;
-lv_obj_t* ui_lightinPer;
-lv_obj_t *ui_setLightPerLab;
-lv_obj_t *ui_curLightPerLab;
-void ui_event_addlightPer( lv_event_t * e);
-lv_obj_t *ui_addlightPer;
-lv_obj_t *ui_addlightPerLab;
-void ui_event_diflightPer( lv_event_t * e);
-lv_obj_t *ui_diflightPer;
-lv_obj_t *ui_diflightPerLab;
-void ui_event_lightStatus(lv_event_t* e);
-lv_obj_t *ui_lightStatus;
-lv_obj_t *ui_lightStatusLab;
-lv_obj_t *ui_lightStatusBtn;
-lv_obj_t *ui_lightStatusImg;
-lv_obj_t *ui_lightMode;
-lv_obj_t *ui_lightModeLab;
-void ui_event_atmosphereBtn( lv_event_t * e);
-lv_obj_t *ui_atmosphereBtn;
-lv_obj_t *ui_atmosphereBtnLab;
-void ui_event_MovieBtn( lv_event_t * e);
-lv_obj_t *ui_MovieBtn;
-lv_obj_t *ui_MovieBtnLab;
-void ui_event_romanBtn( lv_event_t * e);
-lv_obj_t *ui_romanBtn;
-lv_obj_t *ui_romanBtnLab;
-void ui_event_starryBtn( lv_event_t * e);
-lv_obj_t *ui_starryBtn;
-lv_obj_t *ui_starryBtnLab;
-void ui_event_dailyBtn( lv_event_t * e);
-lv_obj_t *ui_dailyBtn;
-lv_obj_t *ui_dailyBtnLab;
+// SCREEN: ui_strat
+enum ui_strat_mode_t ui_strat_mode;
+unsigned int ui_strat_mode_enable_mask = 1 << 0 | 1 << 1;
 // CUSTOM VARIABLES
 
-
-// SCREEN: ui_pump
-void ui_pump_screen_init(void);
-lv_obj_t *ui_pump;
-void ui_event_pumpPer( lv_event_t * e);
-lv_obj_t *ui_pumpPer;
-lv_obj_t* ui_pumpinPer;
-lv_obj_t *ui_curpumpPerLab;
-lv_obj_t *ui_setpumpPerLab;
-void ui_event_addpumpPer( lv_event_t * e);
-lv_obj_t *ui_addpumpPer;
-lv_obj_t *ui_addpumpPerLab;
-void ui_event_difpumpPer( lv_event_t * e);
-lv_obj_t *ui_difpumpPer;
-lv_obj_t *ui_difpumpPerLab;
-lv_obj_t *ui_pumpStatus;
-lv_obj_t *ui_pumpStatusLab;
-lv_obj_t *ui_pumpStatusBtn;
-lv_obj_t *ui_pumpStatusImg;
-// CUSTOM VARIABLES
-
-
-// SCREEN: ui_heater
-void ui_heater_screen_init(void);
-void ui_event_heater( lv_event_t * e);
-lv_obj_t *ui_heater;
-void ui_event_heaterPer( lv_event_t * e);
-lv_obj_t *ui_heaterPer;
-lv_obj_t* ui_heaterinPer;
-lv_obj_t *ui_curheaterPerLab;
-lv_obj_t *ui_setheaterPerLab;
-void ui_event_addheaterPer( lv_event_t * e);
-lv_obj_t *ui_addheaterPer;
-lv_obj_t *ui_addheaterPerLab;
-void ui_event_difheaterPer( lv_event_t * e);
-lv_obj_t *ui_difheaterPer;
-lv_obj_t *ui_difheaterPerLab;
-lv_obj_t *ui_heaterStatus;
-lv_obj_t *ui_heaterStatusLab;
-lv_obj_t *ui_heaterStatusBtn;
-lv_obj_t *ui_heaterStatusImg;
-// CUSTOM VARIABLES
-
-
-// SCREEN: ui_aroma
-void ui_aroma_screen_init(void);
-void ui_event_aroma( lv_event_t * e);
-lv_obj_t *ui_aroma;
-void ui_event_aromaPer( lv_event_t * e);
-lv_obj_t *ui_aromaPer;
-lv_obj_t* ui_aromainPer;
-lv_obj_t *ui_curaromaPerLab;
-lv_obj_t *ui_setaromaPerLab;
-void ui_event_addaromaPer( lv_event_t * e);
-lv_obj_t *ui_addaromaPer;
-lv_obj_t *ui_addaromaPerLab;
-void ui_event_difaromaPer( lv_event_t * e);
-lv_obj_t *ui_difaromaPer;
-lv_obj_t *ui_difaromaPerLab;
-lv_obj_t *ui_aromaStatus;
-lv_obj_t *ui_aromaStatusLab;
-lv_obj_t *ui_aromaStatusBtn;
-lv_obj_t *ui_aromaStatusImg;
-// CUSTOM VARIABLES
-
-
-// SCREEN: ui_feed
-void ui_feed_screen_init(void);
-void ui_event_feed( lv_event_t * e);
-lv_obj_t *ui_feed;
-void ui_event_feedPer( lv_event_t * e);
-lv_obj_t *ui_feedPer;
-lv_obj_t* ui_feedinPer;
-lv_obj_t *ui_curfeedPerLab;
-lv_obj_t *ui_setfeedPerLab;
-void ui_event_addfeedPer( lv_event_t * e);
-lv_obj_t *ui_addfeedPer;
-lv_obj_t *ui_addfeedPerLab;
-void ui_event_diffeedPer( lv_event_t * e);
-lv_obj_t *ui_diffeedPer;
-lv_obj_t *ui_diffeedPerLab;
-lv_obj_t *ui_feedStatus;
-lv_obj_t *ui_feedStatusLab;
-lv_obj_t *ui_feedStatusBtn;
-lv_obj_t *ui_feedStatusImg;
-lv_obj_t *ui_feedAmount;
-lv_obj_t *ui_feedAmountLab;
-lv_obj_t *ui_feedAmountSlider;
-lv_obj_t *ui_feedAmountSliderLab;
-lv_obj_t *ui_feedFreq;
-lv_obj_t *ui_feedFreqLab;
-lv_obj_t *ui_feedFreqBtn;
-lv_obj_t *ui_oneADayBtn;
-lv_obj_t *ui_oneADayBtnLab;
-lv_obj_t *ui_twoADayBtn;
-lv_obj_t *ui_twoADayBtnLab;
-lv_obj_t *ui_threeADayBtn;
-lv_obj_t *ui_threeADayBtnLab;
-lv_obj_t *ui_fiveAWeekBtn;
-lv_obj_t *ui_fiveAWeekBtnLab;
-lv_obj_t *ui_sevenAWeekBtn;
-lv_obj_t *ui_sevenAWeekBtnLab;
+// SCREEN: ui_strat_detail
+lv_obj_t* ui_stratDetail;
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -376,7 +238,7 @@ void ui_event_lighterBtn( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_CLICKED) {
     flag = true;
-    _ui_screen_change( &ui_light, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_light_screen_init);
+    ui_strat_screen_entry(ui_strat_mode_light, LV_SCR_LOAD_ANIM_MOVE_LEFT);
 }
 }
 
@@ -386,7 +248,7 @@ void ui_event_heaterBtn( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_CLICKED) {
     flag = true;
-    _ui_screen_change( &ui_heater, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_heater_screen_init);
+    ui_strat_screen_entry(ui_strat_mode_heat, LV_SCR_LOAD_ANIM_MOVE_LEFT);
 }
 }
 
@@ -396,7 +258,7 @@ void ui_event_waterPumpBtn( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_CLICKED) {
     flag = true;
-    _ui_screen_change( &ui_pump, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_pump_screen_init);
+    ui_strat_screen_entry(ui_strat_mode_pump, LV_SCR_LOAD_ANIM_MOVE_LEFT);
 }
 }
 
@@ -439,7 +301,7 @@ void ui_event_AromatherapyBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        _ui_screen_change(&ui_aroma, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_aroma_screen_init);
+        ui_strat_screen_entry(ui_strat_mode_aroma, LV_SCR_LOAD_ANIM_MOVE_LEFT);
     }
 }
 
@@ -449,7 +311,27 @@ void ui_event_feederBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        _ui_screen_change(&ui_feed, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_feed_screen_init);
+        ui_strat_screen_entry(ui_strat_mode_feed, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+    }
+}
+
+//杀菌灯界面
+void ui_event_sanitizerBtn(lv_event_t* e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if (event_code == LV_EVENT_CLICKED) {
+        flag = true;
+        ui_strat_screen_entry(ui_strat_mode_sanit, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+    }
+}
+
+//蛋白质分解器界面
+void ui_event_isolatorBtn(lv_event_t* e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if (event_code == LV_EVENT_CLICKED) {
+        flag = true;
+        ui_strat_screen_entry(ui_strat_mode_isola, LV_SCR_LOAD_ANIM_MOVE_LEFT);
     }
 }
 
@@ -478,7 +360,7 @@ void ui_event_waterLevel(lv_event_t* e) {
     }
 }
 
-//温度<=水位=>水泵界面
+//温度<=水位=>灯光策略界面
 void ui_event_waterPump(lv_event_t* e) {
 
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -499,12 +381,12 @@ void ui_event_waterPump(lv_event_t* e) {
             flag = !flag;
         }
         else
-            _ui_screen_change(&ui_pump, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_pump_screen_init);
+            ui_strat_screen_entry(ui_strat_mode_light, LV_SCR_LOAD_ANIM_MOVE_LEFT);
         }
 }
 
-//水位<=水泵=>灯光界面
-void ui_event_light(lv_event_t* e) {
+//水位<=灯光策略<=>水泵策略<=>...=>主界面
+void ui_event_strat(lv_event_t* e) {
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -515,7 +397,12 @@ void ui_event_light(lv_event_t* e) {
             flag = !flag;
         }
         else
-            _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_waterLevel_screen_init);
+        {
+            if (ui_strat_mode == 1)
+                _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_waterLevel_screen_init);
+            else
+                ui_strat_screen_entry(ui_strat_mode >> 1, LV_SCR_LOAD_ANIM_MOVE_RIGHT);
+        }
     }
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
         if (flag)
@@ -524,295 +411,28 @@ void ui_event_light(lv_event_t* e) {
             flag = !flag;
         }
         else
-            _ui_screen_change(&ui_light, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_light_screen_init);
+        {
+            if ((ui_strat_mode << 1) & ui_strat_mode_max)
+                _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_waterLevel_screen_init);
+            else
+                ui_strat_screen_entry(ui_strat_mode << 1, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+        }
     }
 }
 
-//水泵<=灯光=>##界面
-void ui_event_next(lv_event_t* e) {
+//具体策略界面=>返回策略界面
+void ui_event_stratDetail(lv_event_t* e) {
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-            _ui_screen_change(&ui_pump, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_pump_screen_init);
+        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_FADE_OUT);
     }
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-            _ui_screen_change(&ui_pump, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_pump_screen_init);
+        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_FADE_OUT);
     }
 }
 
-//灯光亮度显示
-void ui_event_lightPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
-
-if ( event_code == LV_EVENT_VALUE_CHANGED) {
-      _ui_arc_set_text_value( ui_curLightPerLab, target, "", "%");
-}
-}
-
-//灯光亮度增加
-void ui_event_addlightPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED && lightMode < UI_THEME_OFF) {
-      _ui_arc_increment( ui_lightPer, 1);
-}
-}
-
-//灯光亮度降低
-void ui_event_diflightPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED && lightMode <UI_THEME_OFF) {
-      _ui_arc_increment( ui_lightPer, -1);
-}
-}
-
-//灯光状态切换
-void ui_event_lightStatus(lv_event_t* e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    if (event_code == LV_EVENT_CLICKED) {
-        if (lightMode < UI_THEME_OFF) {
-            _ui_switch_theme(UI_THEME_OFF);
-            lv_obj_remove_flag(ui_lightPer, LV_OBJ_FLAG_CLICKABLE);
-            lv_label_set_text(ui_curLightPerLab, "关闭");
-            lightMode += UI_THEME_OFF;
-        }
-        else{
-            lightMode -= UI_THEME_OFF;
-            _ui_switch_theme(lightMode);
-            lv_obj_add_flag(ui_lightPer, LV_OBJ_FLAG_CLICKABLE);
-            _ui_arc_set_text_value(ui_curLightPerLab, ui_lightPer, "", "%");
-        }
-    }
-}
-//灯光模式氛围
-void ui_event_atmosphereBtn( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if ( event_code == LV_EVENT_CLICKED && lightMode <=UI_THEME_OFF) {
-          lightMode = UI_THEME_ATMO;
-          _ui_switch_theme( UI_THEME_ATMO );
-    }
-}
-
-//灯光模式观影
-void ui_event_MovieBtn( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED && lightMode <= UI_THEME_OFF) {
-      lightMode = UI_THEME_MOVIE;
-      _ui_switch_theme( UI_THEME_MOVIE );
-}
-}
-
-//灯光模式浪漫
-void ui_event_romanBtn( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED && lightMode <= UI_THEME_OFF){
-      lightMode = UI_THEME_ROMAN;
-      _ui_switch_theme( UI_THEME_ROMAN );
-}
-}
-
-//灯光模式星空
-void ui_event_starryBtn( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED && lightMode <= UI_THEME_OFF) {
-      lightMode = UI_THEME_STARRY;
-      _ui_switch_theme( UI_THEME_STARRY );
-}
-}
-
-//灯光模式日常
-void ui_event_dailyBtn( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED && lightMode <= UI_THEME_OFF) {
-      lightMode = UI_THEME_DAILY;
-      _ui_switch_theme( UI_THEME_DAILY );
-}
-}
-
-//水泵状态切换
-void ui_event_pumpStatus(lv_event_t* e)
-{
-    static lightMode=1;
-    lv_event_code_t event_code = lv_event_get_code(e);
-    if (event_code == LV_EVENT_CLICKED) {
-        if (lightMode) {
-            lv_obj_set_style_arc_color(ui_pumpPer, lv_color_hex(BTNCLO), LV_PART_INDICATOR | LV_STATE_DEFAULT);
-            lv_obj_set_style_bg_color(ui_pumpStatusBtn, lv_color_hex(0x007AFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_remove_flag(ui_pumpPer, LV_OBJ_FLAG_CLICKABLE);
-            lv_label_set_text(ui_curpumpPerLab, "关闭");
-            lightMode=!lightMode;
-        }
-        else {
-            lightMode = !lightMode;
-            _ui_switch_theme(lightMode);
-            lv_obj_add_flag(ui_pumpPer, LV_OBJ_FLAG_CLICKABLE);
-            _ui_arc_set_text_value(ui_curLightPerLab, ui_pumpPer, "", "%");
-        }
-    }
-}
-
-//水泵档位显示
-void ui_event_pumpPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
-
-if ( event_code == LV_EVENT_VALUE_CHANGED) {
-      _ui_arc_set_text_value( ui_curpumpPerLab, target, "", "");
-}
-}
-
-//水泵档位提高
-void ui_event_addpumpPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment( ui_pumpPer, 1);
-}
-}
-
-//水泵档位降低
-void ui_event_difpumpPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment( ui_pumpPer, -1);
-}
-}
-
-//加热棒返回主界面
-void ui_event_heater( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-lv_indev_wait_release(lv_indev_active());
-      _ui_screen_change( &ui_main, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_main_screen_init);
-}
-}
-
-//加热棒温度显示
-void ui_event_heaterPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
-
-if ( event_code == LV_EVENT_VALUE_CHANGED) {
-      _ui_arc_set_text_value( ui_curheaterPerLab, target, "", "");
-      _ui_arc_set_text_value( ui_heaterStatusLab, target, "运行中 | 温度", "℃");
-}
-}
-
-//加热棒温度提高
-void ui_event_addheaterPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment( ui_heaterPer, 1);
-}
-}
-
-//加热棒温度降低
-void ui_event_difheaterPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment(ui_heaterPer, -1);
-}
-}
-
-//香薰强度显示
-void ui_event_aroma( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT  ) {
-lv_indev_wait_release(lv_indev_active());
-      _ui_screen_change( &ui_main, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_main_screen_init);
-}
-}
-
-//香薰强度显示
-void ui_event_aromaPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
-
-if ( event_code == LV_EVENT_VALUE_CHANGED) {
-      _ui_arc_set_text_value( ui_curaromaPerLab, target, "", "");
-}
-}
-
-//香薰强度提高
-void ui_event_addaromaPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment( ui_aromaPer, 1);
-}
-}
-//香薰强度降低
-void ui_event_difaromaPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment( ui_aromaPer, -1);
-}
-}
-
-//喂食界面跳转
-void ui_event_feed( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT  ) {
-lv_indev_wait_release(lv_indev_active());
-      _ui_screen_change( &ui_main, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_main_screen_init);
-}
-}
-
-//喂食量标签显示 
-void ui_event_feedPer(lv_event_t* e) {
-    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t* target = lv_event_get_target(e);
-
-    if (event_code == LV_EVENT_VALUE_CHANGED) {
-
-        int uniDig = (int)lv_arc_get_value(target) % 10, tenDig = (int)lv_arc_get_value(target) / 10;
-        char buf[_UI_TEMPORARY_STRING_BUFFER_SIZE];
-
-        lv_snprintf(buf, sizeof(buf), "%d%s%d%s", (int)tenDig, ".", uniDig, "h");
-
-        lv_label_set_text(ui_curfeedPerLab, buf);
-    }
-}
-//喂食量增加
-void ui_event_addfeedPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment( ui_feedPer, 1);
-}
-}
-
-//喂食量减少
-void ui_event_diffeedPer( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_arc_increment( ui_feedPer, -1);
-}
-}
 
 ///////////////////// SCREENS ////////////////////
 
@@ -824,6 +444,8 @@ lv_disp_set_theme(dispp, theme);
 
 ui_standby_screen_init();
 ui_main_screen_init();
+ui_strat_screen_init();
+ui_stratDetail_screen_init();
 ui____initial_actions0 = lv_obj_create(NULL);
 lv_disp_load_scr( ui_standby);
 }

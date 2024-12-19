@@ -77,6 +77,11 @@ void ui_event_waterPumpBtn(lv_event_t* e);
 void ui_event_moreBtn(lv_event_t* e);
 void ui_event_AromatherapyBtn(lv_event_t* e);
 void ui_event_feederBtn(lv_event_t* e);
+<<<<<<< Updated upstream
+=======
+void ui_event_sanitizerBtn(lv_event_t* e);
+void ui_event_isolatorBtn(lv_event_t* e);
+>>>>>>> Stashed changes
 extern lv_obj_t* ui_control;
 extern lv_obj_t* ui_controlList;
 
@@ -85,7 +90,6 @@ void ui_more_screen_init(void);
 void ui_event_more(lv_event_t* e);
 extern lv_obj_t* ui_more;
 extern lv_obj_t* ui_moreList;
-extern uint8_t more_flag;
 
 // SCREEN: ui_temp
 void ui_temp_screen_init(void);
@@ -105,147 +109,29 @@ void ui_event_waterPump(lv_event_t* e);
 extern lv_obj_t* ui_waterLevel;
 extern lv_obj_t* ui_waterLevelLab;
 
-// SCREEN: ui_light
-extern int lightMode;
-extern const char * lightModeArr[6];
-void ui_light_screen_init(void);
-void ui_event_light( lv_event_t * e);
-void ui_event_next(lv_event_t* e);
-extern lv_obj_t *ui_light;
-void ui_event_lightPer( lv_event_t * e);
-extern lv_obj_t *ui_lightPer;
-extern lv_obj_t* ui_lightinPer;
-extern lv_obj_t *ui_setLightPerLab;
-extern lv_obj_t *ui_curLightPerLab;
-void ui_event_addlightPer( lv_event_t * e);
-extern lv_obj_t *ui_addlightPer;
-extern lv_obj_t *ui_addlightPerLab;
-void ui_event_diflightPer( lv_event_t * e);
-extern lv_obj_t *ui_diflightPer;
-extern lv_obj_t *ui_diflightPerLab;
-extern lv_obj_t *ui_lightStatus;
-extern lv_obj_t* ui_lightStatusLab;
-void ui_event_lightStatus(lv_event_t* e);
-extern lv_obj_t *ui_lightStatusBtn;
-extern lv_obj_t *ui_lightStatusImg;
-extern lv_obj_t *ui_lightMode;
-extern lv_obj_t *ui_lightModeLab;
-void ui_event_atmosphereBtn( lv_event_t * e);
-extern lv_obj_t *ui_atmosphereBtn;
-extern lv_obj_t *ui_atmosphereBtnLab;
-void ui_event_MovieBtn( lv_event_t * e);
-extern lv_obj_t *ui_MovieBtn;
-extern lv_obj_t *ui_MovieBtnLab;
-void ui_event_romanBtn( lv_event_t * e);
-extern lv_obj_t *ui_romanBtn;
-extern lv_obj_t *ui_romanBtnLab;
-void ui_event_starryBtn( lv_event_t * e);
-extern lv_obj_t *ui_starryBtn;
-extern lv_obj_t *ui_starryBtnLab;
-void ui_event_dailyBtn( lv_event_t * e);
-extern lv_obj_t *ui_dailyBtn;
-extern lv_obj_t *ui_dailyBtnLab;
+// SCREEN: ui_strat
+enum ui_strat_mode_t {
+    ui_strat_mode_light = 1 << 0,
+    ui_strat_mode_pump = 1 << 1,
+    ui_strat_mode_heat = 1 << 2,
+    ui_strat_mode_feed = 1 << 3,
+    ui_strat_mode_aroma = 1 << 4,
+    ui_strat_mode_sanit = 1 << 5,
+    ui_strat_mode_isola = 1 << 6,
+    ui_strat_mode_max = 1 << 7,
+};
+extern unsigned int ui_strat_mode_enable_mask;
+extern enum ui_strat_mode_t ui_strat_mode;
+void ui_strat_screen_init();
+void ui_strat_screen_entry(enum ui_strat_mode_t ui_strat_mode, lv_screen_load_anim_t anim);
+void ui_event_strat(lv_event_t* e);
 // CUSTOM VARIABLES
 
-// SCREEN: ui_pump
-void ui_pump_screen_init(void);
-extern lv_obj_t *ui_pump;
-void ui_event_pumpPer( lv_event_t * e);
-extern lv_obj_t *ui_pumpPer;
-extern lv_obj_t* ui_pumpinPer;
-extern lv_obj_t *ui_curpumpPerLab;
-extern lv_obj_t *ui_setpumpPerLab;
-void ui_event_addpumpPer( lv_event_t * e);
-extern lv_obj_t *ui_addpumpPer;
-extern lv_obj_t *ui_addpumpPerLab;
-void ui_event_difpumpPer( lv_event_t * e);
-extern lv_obj_t *ui_difpumpPer;
-extern lv_obj_t *ui_difpumpPerLab;
-void ui_event_pumpStatus(lv_event_t* e);
-extern lv_obj_t *ui_pumpStatus;
-extern lv_obj_t *ui_pumpStatusLab;
-extern lv_obj_t *ui_pumpStatusBtn;
-extern lv_obj_t *ui_pumpStatusImg;
-// CUSTOM VARIABLES
-
-// SCREEN: ui_heater
-void ui_heater_screen_init(void);
-void ui_event_heater( lv_event_t * e);
-extern lv_obj_t *ui_heater;
-void ui_event_heaterPer( lv_event_t * e);
-extern lv_obj_t *ui_heaterPer;
-extern lv_obj_t* ui_heaterinPer;
-extern lv_obj_t *ui_curheaterPerLab;
-extern lv_obj_t *ui_setheaterPerLab;
-void ui_event_addheaterPer( lv_event_t * e);
-extern lv_obj_t *ui_addheaterPer;
-extern lv_obj_t *ui_addheaterPerLab;
-void ui_event_difheaterPer( lv_event_t * e);
-extern lv_obj_t *ui_difheaterPer;
-extern lv_obj_t *ui_difheaterPerLab;
-extern lv_obj_t *ui_heaterStatus;
-extern lv_obj_t *ui_heaterStatusLab;
-extern lv_obj_t *ui_heaterStatusBtn;
-extern lv_obj_t *ui_heaterStatusImg;
-// CUSTOM VARIABLES
-
-// SCREEN: ui_aroma
-void ui_aroma_screen_init(void);
-void ui_event_aroma( lv_event_t * e);
-extern lv_obj_t *ui_aroma;
-void ui_event_aromaPer( lv_event_t * e);
-extern lv_obj_t *ui_aromaPer;
-extern lv_obj_t* ui_aromainPer;
-extern lv_obj_t *ui_curaromaPerLab;
-extern lv_obj_t *ui_setaromaPerLab;
-void ui_event_addaromaPer( lv_event_t * e);
-extern lv_obj_t *ui_addaromaPer;
-extern lv_obj_t *ui_addaromaPerLab;
-void ui_event_difaromaPer( lv_event_t * e);
-extern lv_obj_t *ui_difaromaPer;
-extern lv_obj_t *ui_difaromaPerLab;
-extern lv_obj_t *ui_aromaStatus;
-extern lv_obj_t *ui_aromaStatusLab;
-extern lv_obj_t *ui_aromaStatusBtn;
-extern lv_obj_t *ui_aromaStatusImg;
-// CUSTOM VARIABLES
-
-// SCREEN: ui_feed
-void ui_feed_screen_init(void);
-void ui_event_feed( lv_event_t * e);
-extern lv_obj_t *ui_feed;
-void ui_event_feedPer( lv_event_t * e);
-extern lv_obj_t *ui_feedPer;
-extern lv_obj_t* ui_feedinPer;
-extern lv_obj_t *ui_curfeedPerLab;
-extern lv_obj_t *ui_setfeedPerLab;
-void ui_event_addfeedPer( lv_event_t * e);
-extern lv_obj_t *ui_addfeedPer;
-extern lv_obj_t *ui_addfeedPerLab;
-void ui_event_diffeedPer( lv_event_t * e);
-extern lv_obj_t *ui_diffeedPer;
-extern lv_obj_t *ui_diffeedPerLab;
-extern lv_obj_t *ui_feedStatus;
-extern lv_obj_t *ui_feedStatusLab;
-extern lv_obj_t *ui_feedStatusBtn;
-extern lv_obj_t *ui_feedStatusImg;
-extern lv_obj_t *ui_feedAmount;
-extern lv_obj_t *ui_feedAmountLab;
-extern lv_obj_t *ui_feedAmountSlider;
-extern lv_obj_t *ui_feedAmountSliderLab;
-extern lv_obj_t *ui_feedFreq;
-extern lv_obj_t *ui_feedFreqLab;
-extern lv_obj_t *ui_feedFreqBtn;
-extern lv_obj_t *ui_oneADayBtn;
-extern lv_obj_t *ui_oneADayBtnLab;
-extern lv_obj_t *ui_twoADayBtn;
-extern lv_obj_t *ui_twoADayBtnLab;
-extern lv_obj_t *ui_threeADayBtn;
-extern lv_obj_t *ui_threeADayBtnLab;
-extern lv_obj_t *ui_fiveAWeekBtn;
-extern lv_obj_t *ui_fiveAWeekBtnLab;
-extern lv_obj_t *ui_sevenAWeekBtn;
-extern lv_obj_t *ui_sevenAWeekBtnLab;
+// SCREEN: ui_strat_detail
+extern lv_obj_t* ui_stratDetail;
+void ui_stratDetail_screen_init();
+void ui_stratDetail_screen_entry();
+void ui_event_stratDetail(lv_event_t* e);
 // CUSTOM VARIABLES
 
 // EVENTS
@@ -267,6 +153,9 @@ LV_IMG_DECLARE( ui_img_off_png);   // assets/off.png
 LV_IMG_DECLARE(ui_img_temp_png);   // assets/temp.png
 LV_IMG_DECLARE(ui_img_bright_png);   // assets/bright.png
 LV_IMG_DECLARE(ui_img_more_png);   // assets/more.png
+LV_IMG_DECLARE(ui_img_lightboard_png);
+LV_IMG_DECLARE(ui_img_pump_fan_png);
+LV_IMG_DECLARE(ui_img_pump_shell_png);
 
 
 

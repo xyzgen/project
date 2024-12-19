@@ -5,9 +5,196 @@
 
 #include "../ui.h"
 
+static void time_select_event_cb(lv_event_t* e);
+static void weekday_select_event_cb(lv_event_t* e);
+
+static lv_obj_t* time_picker_dialog = NULL;
+static lv_obj_t* weekday_picker_dialog = NULL;
+static lv_obj_t* time_label_start = NULL;
+static lv_obj_t* time_label_end = NULL;
+
+// 时间选择回调函数
+static void time_select_event_cb(lv_event_t* e) {
+    lv_obj_t* btn = lv_event_get_target(e);
+    const char* btn_name = lv_obj_get_name(btn);
+
+    // 如果是“开始时间”按钮
+    if (strcmp(btn_name, "Start Time") == 0) {
+        if (time_picker_dialog == NULL) {
+            // 创建时间选择对话框
+            time_picker_dialog = lv_obj_create(lv_scr_act());
+            lv_obj_set_size(time_picker_dialog, 300, 200);
+            lv_obj_align(time_picker_dialog, LV_ALIGN_CENTER, 0, 0);
+
+            // 创建小时选择器
+            lv_obj_t* hour_slider = lv_slider_create(time_picker_dialog);
+            lv_slider_set_range(hour_slider, 0, 23);
+            lv_slider_set_value(hour_slider, 12, LV_ANIM_OFF);
+            lv_obj_set_size(hour_slider, 240, 20);
+            lv_obj_align(hour_slider, LV_ALIGN_TOP_MID, 0, 10);
+
+            // 创建分钟选择器
+            lv_obj_t* minute_slider = lv_slider_create(time_picker_dialog);
+            lv_slider_set_range(minute_slider, 0, 59);
+            lv_slider_set_value(minute_slider, 30, LV_ANIM_OFF);
+            lv_obj_set_size(minute_slider, 240, 20);
+            lv_obj_align(minute_slider, LV_ALIGN_TOP_MID, 0, 50);
+
+            // 创建“确定”和“取消”按钮
+            lv_obj_t* btn_confirm = lv_btn_create(time_picker_dialog);
+            lv_obj_align(btn_confirm, LV_ALIGN_BOTTOM_MID, -60, -10);
+            lv_obj_t* label_confirm = lv_label_create(btn_confirm);
+            lv_label_set_text(label_confirm, "确定");
+            lv_obj_add_event_cb(btn_confirm, time_picker_confirm_event_cb, LV_EVENT_CLICKED, hour_slider);
+
+            lv_obj_t* btn_cancel = lv_btn_create(time_picker_dialog);
+            lv_obj_align(btn_cancel, LV_ALIGN_BOTTOM_MID, 60, -10);
+            lv_obj_t* label_cancel = lv_label_create(btn_cancel);
+            lv_label_set_text(label_cancel, "取消");
+            lv_obj_add_event_cb(btn_cancel, time_picker_cancel_event_cb, LV_EVENT_CLICKED, NULL);
+        }
+    }
+    // 如果是“结束时间”按钮
+    else if (strcmp(btn_name, "End Time") == 0) {
+        // 同理实现结束时间选择（也可以复用相同的时间选择器）
+    }
+}
+
+// 时间选择确定回调
+static void time_picker_confirm_event_cb(lv_event_t* e) {
+    lv_obj_t* hour_slider = lv_event_get_user_data(e);
+    int hour = lv_slider_get_value(hour_slider);
+
+    lv_obj_t* minute_slider = lv_obj_get_child(time_picker_dialog, NULL);
+    int minute = lv_slider_get_value(minute_slider);
+
+    // 更新时间标签
+    char time_str[10];
+    snprintf(time_str, sizeof(time_str), "%02d:%02d", hour, minute);
+    lv_label_set_text(time_label_start, time_str);
+
+    lv_obj_del(time_picker_dialog);  // 关闭对话框
+    time_picker_dialog = NULL;       // 清除对话框
+}
+
+// 时间选择取消回调
+static void time_picker_cancel_event_cb(lv_event_t* e) {
+    lv_obj_del(time_picker_dialog);  // 关闭对话框
+    time_picker_dialog = NULL;       // 清除对话框
+}
+
+// 星期选择回调函数
+static void weekday_select_event_cb(lv_event_t* e) {
+    if (weekday_picker_dialog == NULL) {
+        // 创建星期选择对话框
+        weekday_picker_dialog = lv_obj_create(lv_scr_act());
+        lv_obj_set_size(weekday_picker_dialog, 300, 200);
+        lv_obj_align(weekday_picker_dialog, LV_ALIGN_CENTER, 0, 0);
+
+        // 创建星期选择的复选框
+        lv_obj_t* checkbox_mon = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(checkbox_mon, LV_ALIGN_TOP_LEFT, 10, 10);
+        lv_checkbox_set_text(checkbox_mon, "周一");
+
+        lv_obj_t* checkbox_tue = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(checkbox_tue, LV_ALIGN_TOP_LEFT, 10, 50);
+        lv_checkbox_set_text(checkbox_tue, "周二");
+
+        lv_obj_t* checkbox_wed = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(checkbox_wed, LV_ALIGN_TOP_LEFT, 10, 90);
+        lv_checkbox_set_text(checkbox_wed, "周三");
+
+        lv_obj_t* checkbox_thu = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(checkbox_thu, LV_ALIGN_TOP_LEFT, 10, 130);
+        lv_checkbox_set_text(checkbox_thu, "周四");
+
+        lv_obj_t* checkbox_fri = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(checkbox_fri, LV_ALIGN_TOP_LEFT, 10, 170);
+        lv_checkbox_set_text(checkbox_fri, "周五");
+
+        lv_obj_t* checkbox_sat = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(checkbox_sat, LV_ALIGN_TOP_LEFT, 150, 10);
+        lv_checkbox_set_text(checkbox_sat, "周六");
+
+        lv_obj_t* checkbox_sun = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(checkbox_sun, LV_ALIGN_TOP_LEFT, 150, 50);
+        lv_checkbox_set_text(checkbox_sun, "周日");
+
+        // 创建“确定”和“取消”按钮
+        lv_obj_t* btn_confirm = lv_btn_create(weekday_picker_dialog);
+        lv_obj_align(btn_confirm, LV_ALIGN_BOTTOM_MID, -60, -10);
+        lv_obj_t* label_confirm = lv_label_create(btn_confirm);
+        lv_label_set_text(label_confirm, "确定");
+        lv_obj_add_event_cb(btn_confirm, weekday_picker_confirm_event_cb, LV_EVENT_CLICKED, NULL);
+
+        lv_obj_t* btn_cancel = lv_btn_create(weekday_picker_dialog);
+        lv_obj_align(btn_cancel, LV_ALIGN_BOTTOM_MID, 60, -10);
+        lv_obj_t* label_cancel = lv_label_create(btn_cancel);
+        lv_label_set_text(label_cancel, "取消");
+        lv_obj_add_event_cb(btn_cancel, weekday_picker_cancel_event_cb, LV_EVENT_CLICKED, NULL);
+    }
+}
+
+// 星期选择确定回调
+static void weekday_picker_confirm_event_cb(lv_event_t* e) {
+    lv_obj_t* checkbox_mon = lv_obj_get_child(weekday_picker_dialog, NULL);
+    bool mon = lv_checkbox_is_checked(checkbox_mon);
+
+    // 获取其他星期的选择状态
+    // 更新星期标签等，具体更新可根据需求来做
+
+    lv_obj_del(weekday_picker_dialog);  // 关闭对话框
+    weekday_picker_dialog = NULL;       // 清除对话框
+}
+
+// 星期选择取消回调
+static void weekday_picker_cancel_event_cb(lv_event_t* e) {
+    lv_obj_del(weekday_picker_dialog);  // 关闭对话框
+    weekday_picker_dialog = NULL;       // 清除对话框
+}
+
 void ui_stratDetail_screen_init(void)
 {
-    ui_stratDetail = lv_obj_create(NULL);
-    lv_obj_remove_flag(ui_stratDetail, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-    lv_obj_set_style_bg_color(ui_stratDetail, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // 创建最上面的“开始时间”和“结束时间”按钮
+    lv_obj_t* time_container = lv_obj_create(lv_scr_act());
+    lv_obj_set_size(time_container, LV_HOR_RES, 60);
+    lv_obj_align(time_container, LV_ALIGN_TOP_MID, 0, 10);
+
+    // “开始时间”按钮
+    lv_obj_t* start_time_btn = lv_btn_create(time_container);
+    lv_obj_set_size(start_time_btn, 120, 50);
+    lv_obj_align(start_time_btn, LV_ALIGN_LEFT_MID, 10, 0);
+    lv_obj_set_name(start_time_btn, "Start Time");
+    lv_obj_add_event_cb(start_time_btn, time_select_event_cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t* start_label = lv_label_create(start_time_btn);
+    lv_label_set_text(start_label, "开始时间");
+
+    // “结束时间”按钮
+    lv_obj_t* end_time_btn = lv_btn_create(time_container);
+    lv_obj_set_size(end_time_btn, 120, 50);
+    lv_obj_align(end_time_btn, LV_ALIGN_RIGHT_MID, -10, 0);
+    lv_obj_set_name(end_time_btn, "End Time");
+    lv_obj_add_event_cb(end_time_btn, time_select_event_cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t* end_label = lv_label_create(end_time_btn);
+    lv_label_set_text(end_label, "结束时间");
+
+    // 中间的“星期策略”按钮
+    lv_obj_t* weekday_container = lv_obj_create(lv_scr_act());
+    lv_obj_set_size(weekday_container, LV_HOR_RES, 60);
+    lv_obj_align(weekday_container, LV_ALIGN_TOP_MID, 0, 80);
+
+    lv_obj_t* weekday_btn = lv_btn_create(weekday_container);
+    lv_obj_set_size(weekday_btn, 200, 50);
+    lv_obj_align(weekday_btn, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_name(weekday_btn, "Weekday Strategy");
+    lv_obj_add_event_cb(weekday_btn, weekday_select_event_cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t* weekday_label = lv_label_create(weekday_btn);
+    lv_label_set_text(weekday_label, "星期策略");
+
+    // 底部的滑动条
+    lv_obj_t* slider = lv_slider_create(lv_scr_act());
+    lv_obj_set_size(slider, 240, 20);
+    lv_obj_align(slider, LV_ALIGN_BOTTOM_MID, 0, -20);
+    lv_slider_set_range(slider, 0, 100);  // 设置滑动条的范围
+    lv_slider_set_value(slider, 50, LV_ANIM_OFF);  // 设置滑动条初始值为50
 }

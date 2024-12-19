@@ -16,10 +16,17 @@ static mod_t mod[10] =
     {0,"灯光", &ui_img_light_png, ui_event_lighterBtn},
     {0,"更多", &ui_img_more_png, ui_event_moreBtn},
     {0,"加热棒", &ui_img_heater_png, ui_event_heaterBtn},
+<<<<<<< Updated upstream
     {0,"杀菌灯", &ui_img_lamp_png, ui_event_lighterBtn},
     {0,"香薰", &ui_img_aroma_png, ui_event_AromatherapyBtn},
     {0,"喂食器", &ui_img_feed_png, ui_event_feederBtn},
     {0,"蛋分器", &ui_img_decom_png, ui_event_AromatherapyBtn},
+=======
+    {0,"喂食器", &ui_img_aroma_png, ui_event_feederBtn},
+    {0,"香薰", &ui_img_aroma_png, ui_event_AromatherapyBtn},
+    {0,"杀菌灯", &ui_img_light_png, ui_event_sanitizerBtn},
+    {0,"蛋分器", &ui_img_aroma_png, ui_event_isolatorBtn},
+>>>>>>> Stashed changes
 };
 
 typedef struct module
@@ -141,15 +148,15 @@ static void ui_addBtn_cb(lv_event_t* e)
 {
     module_t* pos;
     for (pos = module;pos->next->next != module;pos = pos->next) { ; }
-    for(int i = 0;i<8;i++)
+    for (int i = 0; i < 9; i++)
     {
-        if (more_flag & 0x1 << i)
+        if (ui_strat_mode_enable_mask >> 2 & 0x1 << i)
         {
             if (!(mod[i + 5].flag))
                 pos = module_ins_node(pos, i + 5);
         }
         else
-            module_del_node(i+5);
+            module_del_node(i + 5);
     }
 
     lv_obj_clean(ui_controlList);
