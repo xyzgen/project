@@ -328,6 +328,8 @@ void ui_stratDetail_screen_init(void)
     lv_obj_align(slider, LV_ALIGN_BOTTOM_MID, 0, -30);
     lv_slider_set_range(slider, 0, 100);  // 设置滑动条的范围
     lv_slider_set_value(slider, 50, LV_ANIM_OFF);  // 设置滑动条初始值为50
+
+    lv_obj_add_event_cb(ui_stratDetail, ui_event_stratDetail, LV_EVENT_ALL, NULL);
 }
 
 static void generate_mask(lv_draw_buf_t* mask)
