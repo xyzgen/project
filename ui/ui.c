@@ -115,7 +115,7 @@ void ui_event_status_return(lv_event_t* e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_TOP) {
-        _ui_screen_change(&cur_act, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, NULL);
+        _ui_screen_change(&cur_act, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, NULL);
     }
 }
 
@@ -128,7 +128,7 @@ void ui_event_status(lv_event_t* e)
 
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_BOTTOM) {
         cur_act = lv_event_get_current_target_obj(e);
-        _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_status_screen_init);
+        _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 500, 0, &ui_status_screen_init);
     }
 
     //if (event_code == LV_EVENT_CLICKED)
@@ -180,7 +180,7 @@ void ui_event_main(lv_event_t* e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if (event_code == LV_EVENT_GESTURE  && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_TOP) {
-        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_main_screen_init);
+        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, &ui_main_screen_init);
         flag = false;
     }
 
@@ -216,7 +216,7 @@ void ui_event_tempBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_temp_screen_init);
+        _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_OVER_LEFT, 500, 0, &ui_temp_screen_init);
     }
 }
 
@@ -227,7 +227,7 @@ void ui_event_waterLevelBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_waterLevel_screen_init);
+        _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_OVER_LEFT, 500, 0, &ui_waterLevel_screen_init);
     }
 }
 
@@ -238,7 +238,7 @@ void ui_event_lighterBtn( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_CLICKED) {
     flag = true;
-    ui_strat_screen_entry(ui_strat_mode_light, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+    ui_strat_screen_entry(ui_strat_mode_light, LV_SCR_LOAD_ANIM_OVER_LEFT);
 }
 }
 
@@ -248,7 +248,7 @@ void ui_event_heaterBtn( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_CLICKED) {
     flag = true;
-    ui_strat_screen_entry(ui_strat_mode_heat, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+    ui_strat_screen_entry(ui_strat_mode_heat, LV_SCR_LOAD_ANIM_OVER_LEFT);
 }
 }
 
@@ -258,7 +258,7 @@ void ui_event_waterPumpBtn( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_CLICKED) {
     flag = true;
-    ui_strat_screen_entry(ui_strat_mode_pump, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+    ui_strat_screen_entry(ui_strat_mode_pump, LV_SCR_LOAD_ANIM_OVER_LEFT);
 }
 }
 
@@ -268,7 +268,7 @@ void ui_event_moreBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        _ui_screen_change(&ui_more, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_more_screen_init);
+        _ui_screen_change(&ui_more, LV_SCR_LOAD_ANIM_OVER_LEFT, 500, 0, &ui_more_screen_init);
     }
 }
 
@@ -288,10 +288,10 @@ void ui_event_more(lv_event_t* e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
+        _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
     }
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-       _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_control_screen_init);
+       _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
     }
 }
 
@@ -301,7 +301,7 @@ void ui_event_AromatherapyBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        ui_strat_screen_entry(ui_strat_mode_aroma, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+        ui_strat_screen_entry(ui_strat_mode_aroma, LV_SCR_LOAD_ANIM_OVER_LEFT);
     }
 }
 
@@ -311,7 +311,7 @@ void ui_event_feederBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        ui_strat_screen_entry(ui_strat_mode_feed, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+        ui_strat_screen_entry(ui_strat_mode_feed, LV_SCR_LOAD_ANIM_OVER_LEFT);
     }
 }
 
@@ -321,7 +321,7 @@ void ui_event_sanitizerBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        ui_strat_screen_entry(ui_strat_mode_sanit, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+        ui_strat_screen_entry(ui_strat_mode_sanit, LV_SCR_LOAD_ANIM_OVER_LEFT);
     }
 }
 
@@ -331,7 +331,7 @@ void ui_event_isolatorBtn(lv_event_t* e) {
 
     if (event_code == LV_EVENT_CLICKED) {
         flag = true;
-        ui_strat_screen_entry(ui_strat_mode_isola, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+        ui_strat_screen_entry(ui_strat_mode_isola, LV_SCR_LOAD_ANIM_OVER_LEFT);
     }
 }
 
@@ -343,7 +343,7 @@ void ui_event_waterLevel(lv_event_t* e) {
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
         if (flag)
         {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
             flag = !flag;
         }
         else
@@ -352,7 +352,7 @@ void ui_event_waterLevel(lv_event_t* e) {
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
         if (flag)
         {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_control_screen_init);
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
             flag = !flag;
         }
         else
@@ -368,7 +368,7 @@ void ui_event_waterPump(lv_event_t* e) {
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
         if (flag)
         {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
             flag = !flag;
         }
         else
@@ -377,7 +377,7 @@ void ui_event_waterPump(lv_event_t* e) {
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
         if (flag)
         {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_control_screen_init);
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
             flag = !flag;
         }
         else
@@ -393,29 +393,47 @@ void ui_event_strat(lv_event_t* e) {
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
         if (flag)
         {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
             flag = !flag;
         }
         else
         {
-            if (ui_strat_mode == 1)
-                _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_waterLevel_screen_init);
-            else
-                ui_strat_screen_entry(ui_strat_mode >> 1, LV_SCR_LOAD_ANIM_MOVE_RIGHT);
+            do {
+                if (ui_strat_mode == 1)
+                {
+                    _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_waterLevel_screen_init);
+                    break;
+                }
+                ui_strat_mode = ui_strat_mode >> 1;
+                if (ui_strat_mode & ui_strat_mode_enable_mask)
+                {
+                    ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_MOVE_RIGHT);
+                    break;
+                }
+            } while (1);
         }
     }
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
         if (flag)
         {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_control_screen_init);
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
             flag = !flag;
         }
         else
         {
-            if ((ui_strat_mode << 1) & ui_strat_mode_max)
-                _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_waterLevel_screen_init);
-            else
-                ui_strat_screen_entry(ui_strat_mode << 1, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+            do {
+                if ((ui_strat_mode << 1) & ui_strat_mode_max)
+                {
+                    _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_main_screen_init);
+                    break;
+                }
+                ui_strat_mode = ui_strat_mode << 1;
+                if (ui_strat_mode & ui_strat_mode_enable_mask)
+                {
+                    ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+                    break;
+                }
+            } while (1);
         }
     }
 }
@@ -426,10 +444,10 @@ void ui_event_stratDetail(lv_event_t* e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_FADE_OUT);
+        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_OUT_BOTTOM);
     }
     if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_FADE_OUT);
+        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_OUT_BOTTOM);
     }
 }
 

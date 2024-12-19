@@ -127,7 +127,6 @@ void ui_event_strat(lv_event_t* e);
 // SCREEN: ui_strat_detail
 extern lv_obj_t* ui_stratDetail;
 void ui_stratDetail_screen_init();
-//void ui_stratDetail_screen_entry();
 void ui_event_stratDetail(lv_event_t* e);
 // CUSTOM VARIABLES
 
