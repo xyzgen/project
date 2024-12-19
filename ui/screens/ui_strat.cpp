@@ -28,6 +28,18 @@ struct pin_set
     uint8_t pc;    //pin code
     uint32_t tv;    //target_value
 };
+const uint8_t led_correspond_pin[] = {
+    42, // 0 -> red led
+    41, // 1 -> green led
+    40, // 2 -> blue led
+    0,  // 3 -> white led
+    0,  // 4 -> yellow led
+    0,  // 5
+    0,  // 6
+    0,  // 7
+    0,  // 8
+    0,  // 9
+};
 
 struct led_strategy_t
 {
@@ -53,6 +65,12 @@ struct led_tmp_t {
     uint32_t duration;
 };
 std::vector<led_tmp_t> led_tmp_set;
+struct led_filter {
+    static constexpr size_t sum = sizeof(led_correspond_pin);
+    inline static uint8_t value[sum] = {};
+    inline static uint8_t target[sum] = {};
+    led_filter() = delete;
+};
 
 
 
@@ -136,7 +154,7 @@ extern "C" static void ui_strat_temp_cb(lv_event_t* e)
 
 extern "C" static void ui_strat_add_cb(lv_event_t* e)
 {
-
+    _ui_screen_change(&ui_stratDetail, LV_SCR_LOAD_ANIM_FADE_IN, 500, 0, &ui_stratDetail_screen_init);
 }
 
 extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t anim)
@@ -185,6 +203,8 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
         lv_image_set_src(titleIcon[scr_where], &ui_img_heater_png);
         break;
     }
+
+
 
     lv_obj_clean(strat_list[scr_where]);
 
