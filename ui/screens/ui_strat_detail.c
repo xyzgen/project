@@ -5,6 +5,15 @@
 
 #include "../ui.h"
 
+typedef struct schedule
+{
+    int8_t wday;
+    int8_t hour;
+    int8_t min;
+}schedule_t;
+
+static void generate_mask(lv_draw_buf_t* mask);
+
 static void time_select_event_cb(lv_event_t* e);
 static void weekday_select_event_cb(lv_event_t* e);
 static void time_picker_cancel_event_cb(lv_event_t* e);
@@ -159,9 +168,111 @@ static void weekday_picker_cancel_event_cb(lv_event_t* e) {
 
 void ui_stratDetail_screen_init(void)
 {
-    ui_stratDetail = lv_obj_create(NULL);
 
-    // 创建最上面的“开始时间”和“结束时间”按钮
+    ui_stratDetail = lv_obj_create(NULL);
+    lv_obj_remove_flag(ui_stratDetail, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
+    lv_obj_set_style_bg_color(ui_stratDetail, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_stratDetail, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_size(&style, 100, 48);
+    lv_style_set_bg_color(&style, lv_color_black());
+    lv_style_set_text_color(&style, lv_color_white());
+    lv_style_set_border_width(&style, 0);
+    lv_style_set_radius(&style, 0);
+
+    lv_obj_t* roller1 = lv_roller_create(ui_stratDetail);
+    lv_obj_add_style(roller1, &style, 0);
+    lv_obj_set_style_bg_opa(roller1, LV_OPA_50, LV_PART_SELECTED);
+
+    lv_roller_set_options(roller1,
+        "00\n"
+        "01\n"
+        "02\n"
+        "03\n"
+        "04\n"
+        "05\n"
+        "06\n"
+        "07\n"
+        "08\n"
+        "09\n"
+        "10\n"
+        "11\n"
+        "12\n"
+        "13\n"
+        "14\n"
+        "15\n"
+        "16\n"
+        "17\n"
+        "18\n"
+        "19\n"
+        "20\n"
+        "21\n"
+        "22\n"
+        "23",
+        LV_ROLLER_MODE_INFINITE);
+
+    lv_obj_t* roller2 = lv_roller_create(ui_stratDetail);
+    lv_obj_add_style(roller2, &style, 0);
+    lv_obj_set_style_bg_opa(roller2, LV_OPA_50, LV_PART_SELECTED);
+
+    lv_roller_set_options(roller2,
+        "00\n"
+        "05\n"
+        "10\n"
+        "15\n"
+        "20\n"
+        "25\n"
+        "30\n"
+        "35\n"
+        "40\n"
+        "45\n"
+        "50\n"
+        "55",
+        LV_ROLLER_MODE_INFINITE);
+    lv_obj_t* roller3 = lv_roller_create(ui_stratDetail);
+    lv_obj_add_style(roller3, &style, 0);
+    lv_obj_set_style_bg_opa(roller3, LV_OPA_50, LV_PART_SELECTED);
+
+    lv_roller_set_options(roller3,
+        "00\n"
+        "01\n"
+        "02\n"
+        "03\n"
+        "04\n"
+        "05\n"
+        "06\n"
+        "07\n"
+        "08\n"
+        "09\n"
+        "10\n"
+        "11\n"
+        "12\n"
+        "13\n"
+        "14\n"
+        "15\n"
+        "16\n"
+        "17\n"
+        "18\n"
+        "19\n"
+        "20\n"
+        "21\n"
+        "22\n"
+        "23",
+        LV_ROLLER_MODE_INFINITE);
+    lv_obj_center(roller3);
+    lv_roller_set_visible_row_count(roller3, 3);
+
+    /* Create the mask to make the top and bottom part of roller faded.
+     * The width and height are empirical values for simplicity*/
+    LV_DRAW_BUF_DEFINE_STATIC(mask, 130, 150, LV_COLOR_FORMAT_L8);
+    LV_DRAW_BUF_INIT_STATIC(mask);
+
+    generate_mask(&mask);
+    lv_obj_set_style_bitmap_mask_src(roller1, &mask, 0);
+
+    // 创建最上面的“开始时间”和“结束时间”标签
     lv_obj_t* time_container = lv_obj_create(ui_stratDetail);
     lv_obj_set_size(time_container, LV_HOR_RES, 60);
     lv_obj_align(time_container, LV_ALIGN_TOP_MID, 0, 10);
@@ -185,7 +296,7 @@ void ui_stratDetail_screen_init(void)
     lv_label_set_text(end_label, "结束时间");
 
     // 中间的“星期策略”按钮
-    lv_obj_t* weekday_container = lv_obj_create(ui_stratDetail);
+    lv_obj_t* weekday_container = lv_obj_create(lv_scr_act());
     lv_obj_set_size(weekday_container, LV_HOR_RES, 60);
     lv_obj_align(weekday_container, LV_ALIGN_TOP_MID, 0, 80);
 
@@ -198,9 +309,42 @@ void ui_stratDetail_screen_init(void)
     lv_label_set_text(weekday_label, "星期策略");
 
     // 底部的滑动条
-    lv_obj_t* slider = lv_slider_create(ui_stratDetail);
+    lv_obj_t* slider = lv_slider_create(lv_scr_act());
     lv_obj_set_size(slider, 240, 20);
     lv_obj_align(slider, LV_ALIGN_BOTTOM_MID, 0, -20);
     lv_slider_set_range(slider, 0, 100);  // 设置滑动条的范围
     lv_slider_set_value(slider, 50, LV_ANIM_OFF);  // 设置滑动条初始值为50
+}
+
+static void generate_mask(lv_draw_buf_t* mask)
+{
+    /*Create a "8 bit alpha" canvas and clear it*/
+    lv_obj_t* canvas = lv_canvas_create(lv_screen_active());
+    lv_canvas_set_draw_buf(canvas, mask);
+    lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_TRANSP);
+
+    lv_layer_t layer;
+    lv_canvas_init_layer(canvas, &layer);
+
+    /*Draw a label to the canvas. The result "image" will be used as mask*/
+    lv_draw_rect_dsc_t rect_dsc;
+    lv_draw_rect_dsc_init(&rect_dsc);
+    rect_dsc.bg_grad.dir = LV_GRAD_DIR_VER;
+    rect_dsc.bg_grad.stops[0].color = lv_color_black();
+    rect_dsc.bg_grad.stops[1].color = lv_color_white();
+    rect_dsc.bg_grad.stops[0].opa = LV_OPA_COVER;
+    rect_dsc.bg_grad.stops[1].opa = LV_OPA_COVER;
+    lv_area_t a = { 0, 0, mask->header.w - 1, mask->header.h / 2 - 10 };
+    lv_draw_rect(&layer, &rect_dsc, &a);
+
+    a.y1 = mask->header.h / 2 + 10;
+    a.y2 = mask->header.h - 1;
+    rect_dsc.bg_grad.stops[0].color = lv_color_white();
+    rect_dsc.bg_grad.stops[1].color = lv_color_black();
+    lv_draw_rect(&layer, &rect_dsc, &a);
+
+    lv_canvas_finish_layer(canvas, &layer);
+
+    /*Comment it to make the mask visible*/
+    lv_obj_delete(canvas);
 }

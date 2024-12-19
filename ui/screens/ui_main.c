@@ -12,8 +12,6 @@ static const char* weekday_cn[] = { "周日", "周一", "周二", "周三", "周
 lv_point_t hour_points[2] = { {CENTER_X, CENTER_Y}, {CENTER_X, CENTER_Y} }, minute_points[2] = { {CENTER_X, CENTER_Y}, {CENTER_X, CENTER_Y} }, second_points[2] = { {CENTER_X, CENTER_Y}, {CENTER_X, CENTER_Y} };
 
 static void update_clock_hands(void);
-static void update_date_label(void);
-static void update_time_label(void);
 
 void ui_main_screen_init(void)
 {
@@ -148,9 +146,12 @@ static void update_clock_hands(void) {
 
     static time_t last_time_update = 0;
     static time_t last_date_update = 0;
-    update_date_label();
+    char date_str[32];
+    snprintf(date_str, sizeof(date_str), "%02d/%d       %s", t->tm_mon + 1, t->tm_mday, weekday_cn[t->tm_wday]);
+    lv_label_set_text(ui_dateLab, date_str);
 
-    update_time_label();
+    strftime(date_str, sizeof(date_str), "%H%M", t);
+    lv_label_set_text(ui_timeLab, date_str);
 
     // 计算每个指针的角度（每小时30度，每分钟6度，每秒6度*60=360度/分钟）
     int hour_angle = (t->tm_hour % 12 + t->tm_min / 60.0) * 30.0 - 90.0; // 调整为12小时制，并居中
@@ -162,12 +163,12 @@ static void update_clock_hands(void) {
     float minute_rad = minute_angle * (2 * 3.1415 / 360.0);
     float second_rad = second_angle * (2 * 3.1415 / 360.0);
 
-   
-    int16_t hour_x = CENTER_X + 20* cos(hour_rad); 
+
+    int16_t hour_x = CENTER_X + 20 * cos(hour_rad);
     int16_t hour_y = CENTER_Y + 20 * sin(hour_rad);
-    int16_t minute_x = CENTER_X  + 24 * cos(minute_rad);
-    int16_t minute_y = CENTER_Y  + 24 * sin(minute_rad);
-    int16_t second_x = CENTER_X  + 28 * cos(second_rad);
+    int16_t minute_x = CENTER_X + 24 * cos(minute_rad);
+    int16_t minute_y = CENTER_Y + 24 * sin(minute_rad);
+    int16_t second_x = CENTER_X + 28 * cos(second_rad);
     int16_t second_y = CENTER_Y + 28 * sin(second_rad);
 
     // 更新指针位置
@@ -183,22 +184,4 @@ static void update_clock_hands(void) {
     second_points[1].y = second_y;
     lv_line_set_points(second_hand, second_points, 2);
 
-}
-
-// 更新日期标签的函数
-static void update_date_label(void) {
-    time_t now = time(NULL);
-    struct tm* timeinfo = localtime(&now);
-    char date_str[32];
-    snprintf(date_str, sizeof(date_str), "%02d/%d       %s", timeinfo->tm_mon+1, timeinfo->tm_mday, weekday_cn[timeinfo->tm_wday]);
-    lv_label_set_text(ui_dateLab, date_str);
-}
-
-// 更新时间标签的函数
-static void update_time_label(void) {
-    time_t now = time(NULL);
-    struct tm* timeinfo = localtime(&now);
-    char time_str[16];
-    strftime(time_str, sizeof(time_str), "%H%M", timeinfo);
-    lv_label_set_text(ui_timeLab, time_str);
 }
