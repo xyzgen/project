@@ -176,7 +176,7 @@ static void weekday_select_event_cb(lv_event_t* e) {
     if (weekday_picker_dialog == NULL) {
         // 创建星期选择对话框
         weekday_picker_dialog = lv_obj_create(lv_scr_act());
-        lv_obj_set_size(weekday_picker_dialog, 300, 200);
+        lv_obj_set_size(weekday_picker_dialog, 240, 200);
         lv_obj_align(weekday_picker_dialog, LV_ALIGN_CENTER, 0, 0);
         lv_obj_set_style_bg_color(weekday_picker_dialog, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_bg_opa(weekday_picker_dialog, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
