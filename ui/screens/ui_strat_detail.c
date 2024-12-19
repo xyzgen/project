@@ -8,8 +8,10 @@
 typedef struct schedule
 {
     int8_t wday;
-    int8_t hour;
-    int8_t min;
+    int8_t hour_start;
+    int8_t min_start;
+    int8_t hour_end;
+    int8_t min_end;
 }schedule_t;
 
 static void generate_mask(lv_draw_buf_t* mask);
@@ -21,73 +23,146 @@ static void weekday_picker_confirm_event_cb(lv_event_t* e);
 static void weekday_picker_cancel_event_cb(lv_event_t* e);
 static void time_picker_confirm_event_cb(lv_event_t* e);
 
+static schedule_t schedule;
+static lv_obj_t* weekbox[7];
 static lv_obj_t* time_picker_dialog = NULL;
 static lv_obj_t* weekday_picker_dialog = NULL;
 static lv_obj_t* time_label_start = NULL;
 static lv_obj_t* time_label_end = NULL;
+static lv_obj_t* week_label = NULL;
 
 // 时间选择回调函数
 static void time_select_event_cb(lv_event_t* e) {
-    //lv_obj_t* btn = lv_event_get_target(e);
-    //const char* btn_name = lv_obj_get_name(btn);
 
-    //// 如果是“开始时间”按钮
-    //if (strcmp(btn_name, "Start Time") == 0) {
-    //    if (time_picker_dialog == NULL) {
-    //        // 创建时间选择对话框
-    //        time_picker_dialog = lv_obj_create(lv_scr_act());
-    //        lv_obj_set_size(time_picker_dialog, 300, 200);
-    //        lv_obj_align(time_picker_dialog, LV_ALIGN_CENTER, 0, 0);
+    int* where = lv_event_get_user_data(e);
 
-    //        // 创建小时选择器
-    //        lv_obj_t* hour_slider = lv_slider_create(time_picker_dialog);
-    //        lv_slider_set_range(hour_slider, 0, 23);
-    //        lv_slider_set_value(hour_slider, 12, LV_ANIM_OFF);
-    //        lv_obj_set_size(hour_slider, 240, 20);
-    //        lv_obj_align(hour_slider, LV_ALIGN_TOP_MID, 0, 10);
+    lv_obj_t* btn = lv_event_get_target(e);
 
-    //        // 创建分钟选择器
-    //        lv_obj_t* minute_slider = lv_slider_create(time_picker_dialog);
-    //        lv_slider_set_range(minute_slider, 0, 59);
-    //        lv_slider_set_value(minute_slider, 30, LV_ANIM_OFF);
-    //        lv_obj_set_size(minute_slider, 240, 20);
-    //        lv_obj_align(minute_slider, LV_ALIGN_TOP_MID, 0, 50);
+    if (time_picker_dialog == NULL) {
+    // 创建时间选择对话框
+    time_picker_dialog = lv_obj_create(ui_stratDetail);
+    lv_obj_set_size(time_picker_dialog, 240, 200);
+    lv_obj_align(time_picker_dialog, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_style_bg_color(time_picker_dialog, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(time_picker_dialog, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    //        // 创建“确定”和“取消”按钮
-    //        lv_obj_t* btn_confirm = lv_btn_create(time_picker_dialog);
-    //        lv_obj_align(btn_confirm, LV_ALIGN_BOTTOM_MID, -60, -10);
-    //        lv_obj_t* label_confirm = lv_label_create(btn_confirm);
-    //        lv_label_set_text(label_confirm, "确定");
-    //        lv_obj_add_event_cb(btn_confirm, time_picker_confirm_event_cb, LV_EVENT_CLICKED, hour_slider);
+    // 创建小时选择器
+    static lv_style_t style;
+    lv_style_init(&style);
+    lv_style_set_size(&style, 90, 24);
+    lv_style_set_bg_color(&style, lv_color_black());
+    lv_style_set_text_color(&style, lv_color_white());
+    lv_style_set_text_font(&style, &ui_font_Chinese16B);
+    lv_style_set_border_width(&style, 0);
+    lv_style_set_radius(&style, 0);
 
-    //        lv_obj_t* btn_cancel = lv_btn_create(time_picker_dialog);
-    //        lv_obj_align(btn_cancel, LV_ALIGN_BOTTOM_MID, 60, -10);
-    //        lv_obj_t* label_cancel = lv_label_create(btn_cancel);
-    //        lv_label_set_text(label_cancel, "取消");
-    //        lv_obj_add_event_cb(btn_cancel, time_picker_cancel_event_cb, LV_EVENT_CLICKED, NULL);
-    //    }
-    //}
-    //// 如果是“结束时间”按钮
-    //else if (strcmp(btn_name, "End Time") == 0) {
-    //    // 同理实现结束时间选择（也可以复用相同的时间选择器）
-    //}
+    ui_hourRoller = lv_roller_create(time_picker_dialog);
+    lv_obj_add_style(ui_hourRoller, &style, 0);
+    lv_obj_set_style_bg_opa(ui_hourRoller, LV_OPA_50, LV_PART_SELECTED);
+
+    lv_roller_set_options(ui_hourRoller,
+        "00\n"
+        "01\n"
+        "02\n"
+        "03\n"
+        "04\n"
+        "05\n"
+        "06\n"
+        "07\n"
+        "08\n"
+        "09\n"
+        "10\n"
+        "11\n"
+        "12\n"
+        "13\n"
+        "14\n"
+        "15\n"
+        "16\n"
+        "17\n"
+        "18\n"
+        "19\n"
+        "20\n"
+        "21\n"
+        "22\n"
+        "23",
+        LV_ROLLER_MODE_INFINITE);
+
+    lv_obj_align(ui_hourRoller, LV_ALIGN_CENTER, -60, -60);
+    lv_roller_set_visible_row_count(ui_hourRoller, 3);
+
+    // 创建分钟选择器
+    ui_minRoller = lv_roller_create(time_picker_dialog);
+    lv_obj_add_style(ui_minRoller, &style, 0);
+    lv_obj_set_style_bg_opa(ui_minRoller, LV_OPA_50, LV_PART_SELECTED);
+
+    lv_roller_set_options(ui_minRoller,
+        "00\n"
+        "05\n"
+        "10\n"
+        "15\n"
+        "20\n"
+        "25\n"
+        "30\n"
+        "35\n"
+        "40\n"
+        "45\n"
+        "50\n"
+        "55",
+        LV_ROLLER_MODE_INFINITE);
+    lv_obj_align(ui_minRoller, LV_ALIGN_CENTER, 60, -60);
+    lv_roller_set_visible_row_count(ui_minRoller, 3);
+
+    /* Create the mask to make the top and bottom part of roller faded.
+    * The width and height are empirical values for simplicity*/
+    LV_DRAW_BUF_DEFINE_STATIC(mask, 130, 150, LV_COLOR_FORMAT_L8);
+    LV_DRAW_BUF_INIT_STATIC(mask);
+
+    generate_mask(&mask);
+    lv_obj_set_style_bitmap_mask_src(ui_hourRoller, &mask, 0);
+    lv_obj_set_style_bitmap_mask_src(ui_minRoller, &mask, 0);
+
+    // 创建“确定”和“取消”按钮
+    lv_obj_t* btn_confirm = lv_btn_create(time_picker_dialog);
+    lv_obj_align(btn_confirm, LV_ALIGN_BOTTOM_MID, -60, -10);
+    lv_obj_t* label_confirm = lv_label_create(btn_confirm);
+    lv_label_set_text(label_confirm, "确定");
+    lv_obj_set_style_text_font(label_confirm, &ui_font_Chinese16B, LV_PART_MAIN);
+
+    lv_obj_add_event_cb(btn_confirm, time_picker_confirm_event_cb, LV_EVENT_CLICKED, where);
+
+    lv_obj_t* btn_cancel = lv_btn_create(time_picker_dialog);
+    lv_obj_align(btn_cancel, LV_ALIGN_BOTTOM_MID, 60, -10);
+    lv_obj_t* label_cancel = lv_label_create(btn_cancel);
+    lv_label_set_text(label_cancel, "取消");
+    lv_obj_set_style_text_font(label_cancel, &ui_font_Chinese16B, LV_PART_MAIN);
+
+    lv_obj_add_event_cb(btn_cancel, time_picker_cancel_event_cb, LV_EVENT_CLICKED, NULL);
+    }
 }
 
 // 时间选择确定回调
 static void time_picker_confirm_event_cb(lv_event_t* e) {
-    //lv_obj_t* hour_slider = lv_event_get_user_data(e);
-    //int hour = lv_slider_get_value(hour_slider);
 
-    //lv_obj_t* minute_slider = lv_obj_get_child(time_picker_dialog, NULL);
-    //int minute = lv_slider_get_value(minute_slider);
+    int where = lv_event_get_user_data(e);
 
-    //// 更新时间标签
-    //char time_str[10];
-    //snprintf(time_str, sizeof(time_str), "%02d:%02d", hour, minute);
-    //lv_label_set_text(time_label_start, time_str);
+    int hour = lv_roller_get_selected(ui_hourRoller);
 
-    //lv_obj_del(time_picker_dialog);  // 关闭对话框
-    //time_picker_dialog = NULL;       // 清除对话框
+    int minute = lv_roller_get_selected(ui_minRoller)*5;
+
+    if (where)
+    {
+        lv_label_set_text_fmt(time_label_start, "%02d:%02d", hour, minute);
+        schedule.hour_start = hour;
+        schedule.min_start = minute;
+    }
+    else
+    {
+        lv_label_set_text_fmt(time_label_end, "%02d:%02d", hour, minute);
+        schedule.hour_end = hour;
+        schedule.min_end = minute;
+    }
+    lv_obj_del(time_picker_dialog);  // 关闭对话框
+    time_picker_dialog = NULL;       // 清除对话框
 }
 
 // 时间选择取消回调
@@ -98,66 +173,94 @@ static void time_picker_cancel_event_cb(lv_event_t* e) {
 
 // 星期选择回调函数
 static void weekday_select_event_cb(lv_event_t* e) {
-    //if (weekday_picker_dialog == NULL) {
-    //    // 创建星期选择对话框
-    //    weekday_picker_dialog = lv_obj_create(lv_scr_act());
-    //    lv_obj_set_size(weekday_picker_dialog, 300, 200);
-    //    lv_obj_align(weekday_picker_dialog, LV_ALIGN_CENTER, 0, 0);
+    if (weekday_picker_dialog == NULL) {
+        // 创建星期选择对话框
+        weekday_picker_dialog = lv_obj_create(lv_scr_act());
+        lv_obj_set_size(weekday_picker_dialog, 300, 200);
+        lv_obj_align(weekday_picker_dialog, LV_ALIGN_CENTER, 0, 0);
+        lv_obj_set_style_bg_color(weekday_picker_dialog, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_opa(weekday_picker_dialog, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    //    // 创建星期选择的复选框
-    //    lv_obj_t* checkbox_mon = lv_checkbox_create(weekday_picker_dialog);
-    //    lv_obj_align(checkbox_mon, LV_ALIGN_TOP_LEFT, 10, 10);
-    //    lv_checkbox_set_text(checkbox_mon, "周一");
+        // 创建星期选择的复选框
+        weekbox[1] = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(weekbox[1], LV_ALIGN_TOP_LEFT, 10, 10);
+        lv_checkbox_set_text(weekbox[1], "周一");
+        lv_obj_set_style_text_color(weekbox[1], lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(weekbox[1], &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    lv_obj_t* checkbox_tue = lv_checkbox_create(weekday_picker_dialog);
-    //    lv_obj_align(checkbox_tue, LV_ALIGN_TOP_LEFT, 10, 50);
-    //    lv_checkbox_set_text(checkbox_tue, "周二");
+        weekbox[2] = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(weekbox[2], LV_ALIGN_TOP_LEFT, 10, 40);
+        lv_checkbox_set_text(weekbox[2], "周二");
+        lv_obj_set_style_text_color(weekbox[2], lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(weekbox[2], &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    lv_obj_t* checkbox_wed = lv_checkbox_create(weekday_picker_dialog);
-    //    lv_obj_align(checkbox_wed, LV_ALIGN_TOP_LEFT, 10, 90);
-    //    lv_checkbox_set_text(checkbox_wed, "周三");
+        weekbox[3] = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(weekbox[3], LV_ALIGN_TOP_LEFT, 10, 70);
+        lv_checkbox_set_text(weekbox[3], "周三");
+        lv_obj_set_style_text_color(weekbox[3], lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(weekbox[3], &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    lv_obj_t* checkbox_thu = lv_checkbox_create(weekday_picker_dialog);
-    //    lv_obj_align(checkbox_thu, LV_ALIGN_TOP_LEFT, 10, 130);
-    //    lv_checkbox_set_text(checkbox_thu, "周四");
+        weekbox[4] = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(weekbox[4], LV_ALIGN_TOP_LEFT, 10, 100);
+        lv_checkbox_set_text(weekbox[4], "周四");
+        lv_obj_set_style_text_color(weekbox[4], lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(weekbox[4], &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    lv_obj_t* checkbox_fri = lv_checkbox_create(weekday_picker_dialog);
-    //    lv_obj_align(checkbox_fri, LV_ALIGN_TOP_LEFT, 10, 170);
-    //    lv_checkbox_set_text(checkbox_fri, "周五");
+        weekbox[5] = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(weekbox[5], LV_ALIGN_TOP_LEFT, 150, 10);
+        lv_checkbox_set_text(weekbox[5], "周五");
+        lv_obj_set_style_text_color(weekbox[5], lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(weekbox[5], &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    lv_obj_t* checkbox_sat = lv_checkbox_create(weekday_picker_dialog);
-    //    lv_obj_align(checkbox_sat, LV_ALIGN_TOP_LEFT, 150, 10);
-    //    lv_checkbox_set_text(checkbox_sat, "周六");
+        weekbox[6] = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(weekbox[6], LV_ALIGN_TOP_LEFT, 150, 40);
+        lv_checkbox_set_text(weekbox[6], "周六");
+        lv_obj_set_style_text_color(weekbox[6], lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(weekbox[6], &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    lv_obj_t* checkbox_sun = lv_checkbox_create(weekday_picker_dialog);
-    //    lv_obj_align(checkbox_sun, LV_ALIGN_TOP_LEFT, 150, 50);
-    //    lv_checkbox_set_text(checkbox_sun, "周日");
+        weekbox[0] = lv_checkbox_create(weekday_picker_dialog);
+        lv_obj_align(weekbox[0], LV_ALIGN_TOP_LEFT, 150, 70);
+        lv_checkbox_set_text(weekbox[0], "周日");
+        lv_obj_set_style_text_color(weekbox[0], lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+        lv_obj_set_style_text_font(weekbox[0], &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    // 创建“确定”和“取消”按钮
-    //    lv_obj_t* btn_confirm = lv_btn_create(weekday_picker_dialog);
-    //    lv_obj_align(btn_confirm, LV_ALIGN_BOTTOM_MID, -60, -10);
-    //    lv_obj_t* label_confirm = lv_label_create(btn_confirm);
-    //    lv_label_set_text(label_confirm, "确定");
-    //    lv_obj_add_event_cb(btn_confirm, weekday_picker_confirm_event_cb, LV_EVENT_CLICKED, NULL);
+        // 创建“确定”和“取消”按钮
+        lv_obj_t* btn_confirm = lv_btn_create(weekday_picker_dialog);
+        lv_obj_align(btn_confirm, LV_ALIGN_BOTTOM_MID, -60, -10);
+        lv_obj_t* label_confirm = lv_label_create(btn_confirm);
+        lv_label_set_text(label_confirm, "确定");
+        lv_obj_set_style_text_font(btn_confirm, &ui_font_Chinese16B, LV_PART_MAIN);
 
-    //    lv_obj_t* btn_cancel = lv_btn_create(weekday_picker_dialog);
-    //    lv_obj_align(btn_cancel, LV_ALIGN_BOTTOM_MID, 60, -10);
-    //    lv_obj_t* label_cancel = lv_label_create(btn_cancel);
-    //    lv_label_set_text(label_cancel, "取消");
-    //    lv_obj_add_event_cb(btn_cancel, weekday_picker_cancel_event_cb, LV_EVENT_CLICKED, NULL);
-    //}
+        lv_obj_add_event_cb(btn_confirm, weekday_picker_confirm_event_cb, LV_EVENT_CLICKED, NULL);
+
+        lv_obj_t* btn_cancel = lv_btn_create(weekday_picker_dialog);
+        lv_obj_align(btn_cancel, LV_ALIGN_BOTTOM_MID, 60, -10);
+        lv_obj_t* label_cancel = lv_label_create(btn_cancel);
+        lv_label_set_text(label_cancel, "取消");
+        lv_obj_set_style_text_font(label_cancel, &ui_font_Chinese16B, LV_PART_MAIN);
+
+        lv_obj_add_event_cb(btn_cancel, weekday_picker_cancel_event_cb, LV_EVENT_CLICKED, NULL);
+    }
 }
 
 // 星期选择确定回调
 static void weekday_picker_confirm_event_cb(lv_event_t* e) {
-    //lv_obj_t* checkbox_mon = lv_obj_get_child(weekday_picker_dialog, NULL);
-    //bool mon = lv_checkbox_is_checked(checkbox_mon);
+    char str[45] = { 0 };
+    for (int i = 0;i < 7;i++)
+    {
+        if (lv_obj_has_state(weekbox[i], LV_STATE_CHECKED))
+        {
+            schedule.wday |= 1 << i;
+            strcat(str, lv_checkbox_get_text(weekbox[i]));
+        }
+        else
+            schedule.wday &= ~(1 << i);
+    }
+    
+    lv_label_set_text(week_label,str);
 
-    //// 获取其他星期的选择状态
-    //// 更新星期标签等，具体更新可根据需求来做
-
-    //lv_obj_del(weekday_picker_dialog);  // 关闭对话框
-    //weekday_picker_dialog = NULL;       // 清除对话框
+    lv_obj_del(weekday_picker_dialog);  // 关闭对话框
+    weekday_picker_dialog = NULL;       // 清除对话框
 }
 
 // 星期选择取消回调
@@ -174,144 +277,55 @@ void ui_stratDetail_screen_init(void)
     lv_obj_set_style_bg_color(ui_stratDetail, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_stratDetail, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_size(&style, 100, 48);
-    lv_style_set_bg_color(&style, lv_color_black());
-    lv_style_set_text_color(&style, lv_color_white());
-    lv_style_set_border_width(&style, 0);
-    lv_style_set_radius(&style, 0);
-
-    lv_obj_t* roller1 = lv_roller_create(ui_stratDetail);
-    lv_obj_add_style(roller1, &style, 0);
-    lv_obj_set_style_bg_opa(roller1, LV_OPA_50, LV_PART_SELECTED);
-
-    lv_roller_set_options(roller1,
-        "00\n"
-        "01\n"
-        "02\n"
-        "03\n"
-        "04\n"
-        "05\n"
-        "06\n"
-        "07\n"
-        "08\n"
-        "09\n"
-        "10\n"
-        "11\n"
-        "12\n"
-        "13\n"
-        "14\n"
-        "15\n"
-        "16\n"
-        "17\n"
-        "18\n"
-        "19\n"
-        "20\n"
-        "21\n"
-        "22\n"
-        "23",
-        LV_ROLLER_MODE_INFINITE);
-
-    lv_obj_t* roller2 = lv_roller_create(ui_stratDetail);
-    lv_obj_add_style(roller2, &style, 0);
-    lv_obj_set_style_bg_opa(roller2, LV_OPA_50, LV_PART_SELECTED);
-
-    lv_roller_set_options(roller2,
-        "00\n"
-        "05\n"
-        "10\n"
-        "15\n"
-        "20\n"
-        "25\n"
-        "30\n"
-        "35\n"
-        "40\n"
-        "45\n"
-        "50\n"
-        "55",
-        LV_ROLLER_MODE_INFINITE);
-    lv_obj_t* roller3 = lv_roller_create(ui_stratDetail);
-    lv_obj_add_style(roller3, &style, 0);
-    lv_obj_set_style_bg_opa(roller3, LV_OPA_50, LV_PART_SELECTED);
-
-    lv_roller_set_options(roller3,
-        "00\n"
-        "01\n"
-        "02\n"
-        "03\n"
-        "04\n"
-        "05\n"
-        "06\n"
-        "07\n"
-        "08\n"
-        "09\n"
-        "10\n"
-        "11\n"
-        "12\n"
-        "13\n"
-        "14\n"
-        "15\n"
-        "16\n"
-        "17\n"
-        "18\n"
-        "19\n"
-        "20\n"
-        "21\n"
-        "22\n"
-        "23",
-        LV_ROLLER_MODE_INFINITE);
-    lv_obj_center(roller3);
-    lv_roller_set_visible_row_count(roller3, 3);
-
-    /* Create the mask to make the top and bottom part of roller faded.
-     * The width and height are empirical values for simplicity*/
-    LV_DRAW_BUF_DEFINE_STATIC(mask, 130, 150, LV_COLOR_FORMAT_L8);
-    LV_DRAW_BUF_INIT_STATIC(mask);
-
-    generate_mask(&mask);
-    lv_obj_set_style_bitmap_mask_src(roller1, &mask, 0);
-
-    // 创建最上面的“开始时间”和“结束时间”标签
-    lv_obj_t* time_container = lv_obj_create(ui_stratDetail);
-    lv_obj_set_size(time_container, LV_HOR_RES, 60);
-    lv_obj_align(time_container, LV_ALIGN_TOP_MID, 0, 10);
-
     // “开始时间”按钮
-    lv_obj_t* start_time_btn = lv_btn_create(time_container);
-    lv_obj_set_size(start_time_btn, 120, 50);
-    lv_obj_align(start_time_btn, LV_ALIGN_LEFT_MID, 10, 0);
-    //lv_obj_set_name(start_time_btn, "Start Time");
-    lv_obj_add_event_cb(start_time_btn, time_select_event_cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t* start_time_btn = lv_btn_create(ui_stratDetail);
+    lv_obj_set_size(start_time_btn, 80, 24);
+    lv_obj_align(start_time_btn, LV_ALIGN_TOP_LEFT, 30, 30);
+    lv_obj_add_event_cb(start_time_btn, time_select_event_cb, LV_EVENT_CLICKED, 1);
     lv_obj_t* start_label = lv_label_create(start_time_btn);
     lv_label_set_text(start_label, "开始时间");
+    lv_obj_set_style_text_font(start_label, &ui_font_Chinese16B, LV_PART_MAIN);
 
     // “结束时间”按钮
-    lv_obj_t* end_time_btn = lv_btn_create(time_container);
-    lv_obj_set_size(end_time_btn, 120, 50);
-    lv_obj_align(end_time_btn, LV_ALIGN_RIGHT_MID, -10, 0);
-    //lv_obj_set_name(end_time_btn, "End Time");
-    lv_obj_add_event_cb(end_time_btn, time_select_event_cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_t* end_time_btn = lv_btn_create(ui_stratDetail);
+    lv_obj_set_size(end_time_btn, 80, 24);
+    lv_obj_align(end_time_btn, LV_ALIGN_TOP_RIGHT, -30, 30);
+    lv_obj_add_event_cb(end_time_btn, time_select_event_cb, LV_EVENT_CLICKED, 0);
     lv_obj_t* end_label = lv_label_create(end_time_btn);
     lv_label_set_text(end_label, "结束时间");
+    lv_obj_set_style_text_font(end_label, &ui_font_Chinese16B, LV_PART_MAIN);
 
     // 中间的“星期策略”按钮
-    lv_obj_t* weekday_container = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(weekday_container, LV_HOR_RES, 60);
-    lv_obj_align(weekday_container, LV_ALIGN_TOP_MID, 0, 80);
-
-    lv_obj_t* weekday_btn = lv_btn_create(weekday_container);
-    lv_obj_set_size(weekday_btn, 200, 50);
+    lv_obj_t* weekday_btn = lv_btn_create(ui_stratDetail);
+    lv_obj_set_size(weekday_btn, 80, 24);
     lv_obj_align(weekday_btn, LV_ALIGN_CENTER, 0, 0);
-    //lv_obj_set_name(weekday_btn, "Weekday Strategy");
     lv_obj_add_event_cb(weekday_btn, weekday_select_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t* weekday_label = lv_label_create(weekday_btn);
     lv_label_set_text(weekday_label, "星期策略");
+    lv_obj_set_style_text_font(weekday_label, &ui_font_Chinese16B, LV_PART_MAIN);
+
+    time_label_start = lv_label_create(ui_stratDetail);
+    lv_obj_align(time_label_start, LV_ALIGN_TOP_LEFT, 50, 58);
+    lv_label_set_text(time_label_start, "--:--");
+    lv_obj_set_style_text_color(time_label_start, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+    lv_obj_set_style_text_font(time_label_start, &ui_font_Chinese16B, LV_PART_MAIN);
+
+    time_label_end = lv_label_create(ui_stratDetail);
+    lv_obj_align(time_label_end, LV_ALIGN_TOP_RIGHT, -50, 58);
+    lv_label_set_text(time_label_end, "--:--");
+    lv_obj_set_style_text_color(time_label_end, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+    lv_obj_set_style_text_font(time_label_end, &ui_font_Chinese16B, LV_PART_MAIN);
+
+    week_label = lv_label_create(ui_stratDetail);
+    lv_obj_align(week_label, LV_ALIGN_CENTER, 0, 32);
+    lv_label_set_text(week_label, "-");
+    lv_obj_set_style_text_color(week_label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+    lv_obj_set_style_text_font(week_label, &ui_font_Chinese16B, LV_PART_MAIN);
 
     // 底部的滑动条
-    lv_obj_t* slider = lv_slider_create(lv_scr_act());
-    lv_obj_set_size(slider, 240, 20);
-    lv_obj_align(slider, LV_ALIGN_BOTTOM_MID, 0, -20);
+    lv_obj_t* slider = lv_slider_create(ui_stratDetail);
+    lv_obj_set_size(slider, 220, 20);
+    lv_obj_align(slider, LV_ALIGN_BOTTOM_MID, 0, -30);
     lv_slider_set_range(slider, 0, 100);  // 设置滑动条的范围
     lv_slider_set_value(slider, 50, LV_ANIM_OFF);  // 设置滑动条初始值为50
 }

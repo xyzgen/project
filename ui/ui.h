@@ -128,6 +128,9 @@ void ui_event_strat(lv_event_t* e);
 extern lv_obj_t* ui_stratDetail;
 void ui_stratDetail_screen_init();
 void ui_event_stratDetail(lv_event_t* e);
+extern lv_obj_t* ui_hourRoller;
+extern lv_obj_t* ui_minRoller;
+extern lv_obj_t* ui_wdayRoller;
 // CUSTOM VARIABLES
 
 // EVENTS
