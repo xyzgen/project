@@ -22,7 +22,7 @@ void ui_temp_screen_init(void)
     lv_obj_set_style_image_recolor_opa(ui_tempImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_tempLab = lv_label_create(ui_temp);
-    lv_obj_align(ui_tempLab, LV_ALIGN_TOP_MID, 0, 32);
+    lv_obj_align(ui_tempLab, LV_ALIGN_TOP_MID, 16, 28);
     lv_obj_set_style_text_color(ui_tempLab, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
     lv_obj_set_style_text_font(ui_tempLab, &ui_font_Chinese32B, LV_PART_MAIN);
 
@@ -42,15 +42,16 @@ void ui_temp_screen_init(void)
     lv_scale_set_mode(ui_tempChart_Yaxis, LV_SCALE_MODE_VERTICAL_LEFT);
     lv_obj_set_size(ui_tempChart_Yaxis, 30, 150);
     lv_obj_set_align(ui_tempChart_Yaxis, LV_ALIGN_LEFT_MID);
-    lv_obj_set_y(ui_tempChart_Yaxis,-6);
+    lv_obj_set_pos(ui_tempChart_Yaxis,16,-6);
     lv_obj_set_style_line_width(ui_tempChart_Yaxis, 0, LV_PART_MAIN);
-    lv_obj_set_style_line_width(ui_tempChart_Yaxis, 1, LV_PART_ITEMS);
-    lv_obj_set_style_line_width(ui_tempChart_Yaxis, 1, LV_PART_INDICATOR);
-    lv_scale_set_range(ui_tempChart_Yaxis, 10, 40);
+    lv_obj_set_style_line_width(ui_tempChart_Yaxis, 0, LV_PART_ITEMS);
+    lv_obj_set_style_line_width(ui_tempChart_Yaxis, 0, LV_PART_INDICATOR);
+    lv_scale_set_range(ui_tempChart_Yaxis, 0, 60);
     lv_obj_set_style_length(ui_tempChart_Yaxis, 5, LV_PART_ITEMS);
     lv_obj_set_style_length(ui_tempChart_Yaxis, 10, LV_PART_INDICATOR);
     lv_obj_set_style_line_color(ui_tempChart_Yaxis, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR);
     lv_obj_set_style_text_color(ui_tempChart_Yaxis, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR);
+    lv_obj_set_style_text_font(ui_tempChart_Yaxis, &ui_font_Chinese16B, LV_PART_INDICATOR);
 
     lv_scale_set_total_tick_count(ui_tempChart_Yaxis, (5 > 0 ? 5 - 1 : 0) * 2 + 1);
     lv_scale_set_major_tick_every(ui_tempChart_Yaxis, 2 >= 1 ? 2 : 1);

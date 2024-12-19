@@ -16,10 +16,10 @@ static mod_t mod[10] =
     {0,"灯光", &ui_img_light_png, ui_event_lighterBtn},
     {0,"更多", &ui_img_more_png, ui_event_moreBtn},
     {0,"加热棒", &ui_img_heater_png, ui_event_heaterBtn},
-    {0,"杀菌灯", &ui_img_light_png, ui_event_lighterBtn},
+    {0,"杀菌灯", &ui_img_lamp_png, ui_event_lighterBtn},
     {0,"香薰", &ui_img_aroma_png, ui_event_AromatherapyBtn},
-    {0,"喂食器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
-    {0,"蛋分器", &ui_img_aroma_png, ui_event_AromatherapyBtn},
+    {0,"喂食器", &ui_img_feed_png, ui_event_feederBtn},
+    {0,"蛋分器", &ui_img_decom_png, ui_event_AromatherapyBtn},
 };
 
 typedef struct module

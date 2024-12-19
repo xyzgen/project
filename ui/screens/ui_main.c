@@ -78,17 +78,15 @@ void ui_main_screen_init(void)
 
     lv_style_init(&style_temp);
     lv_style_set_bg_color(&style_temp, lv_palette_main(LV_PALETTE_RED));
-    lv_style_set_bg_grad_color(&style_temp, lv_color_hex(LANDE));
-    lv_style_set_bg_grad_dir(&style_temp, LV_GRAD_DIR_VER);
 
     ui_tempBar = lv_bar_create(ui_main);
     lv_obj_add_style(ui_tempBar, &style_temp, LV_PART_INDICATOR);
     lv_obj_set_size(ui_tempBar, 8, 90);
     lv_obj_align(ui_tempBar, LV_ALIGN_CENTER, 45, 15);
-    lv_bar_set_range(ui_tempBar, 10, 40);
+    lv_bar_set_range(ui_tempBar, 0, 60);
     lv_bar_set_value(ui_tempBar, 30, LV_ANIM_ON);
-    lv_obj_set_style_bg_color(ui_tempBar, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(ui_tempBar, 63, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui_tempBar, lv_palette_main(LV_PALETTE_RED), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(ui_tempBar, 127, LV_PART_MAIN);
 
     lv_obj_t* tempimg = lv_image_create(ui_main);
     lv_image_set_src(tempimg, &ui_img_temp_png);
@@ -104,8 +102,6 @@ void ui_main_screen_init(void)
 
     lv_style_init(&style_level);
     lv_style_set_bg_color(&style_level, lv_color_hex(LANDE));
-    lv_style_set_bg_grad_color(&style_level, lv_palette_main(LV_PALETTE_RED));
-    lv_style_set_bg_grad_dir(&style_level, LV_GRAD_DIR_VER);
 
     ui_waterLevelBar = lv_bar_create(ui_main);
     lv_obj_add_style(ui_waterLevelBar, &style_level, LV_PART_INDICATOR);
@@ -113,8 +109,8 @@ void ui_main_screen_init(void)
     lv_obj_align(ui_waterLevelBar, LV_ALIGN_CENTER, 75, 15);
     lv_bar_set_range(ui_waterLevelBar, 0, 2);
     lv_bar_set_value(ui_waterLevelBar, 2, LV_ANIM_ON);
-    lv_obj_set_style_bg_color(ui_waterLevelBar, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-    lv_obj_set_style_bg_opa(ui_waterLevelBar, 63, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui_waterLevelBar, lv_color_hex(LANDE), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(ui_waterLevelBar, 127, LV_PART_MAIN);
 
     lv_obj_t* levelimg = lv_image_create(ui_main);
     lv_image_set_src(levelimg, &ui_img_level_png);

@@ -2829,9 +2829,10 @@
     <ClCompile Include="..\ui\fonts\ui_font_Chinese96.c" />
     <ClCompile Include="..\ui\images\ui_img_aroma_png.c" />
     <ClCompile Include="..\ui\images\ui_img_bright_png.c" />
-    <ClCompile Include="..\ui\images\ui_img_cloud_png.c" />
+    <ClCompile Include="..\ui\images\ui_img_decom_png.c" />
     <ClCompile Include="..\ui\images\ui_img_feed_png.c" />
     <ClCompile Include="..\ui\images\ui_img_heater_png.c" />
+    <ClCompile Include="..\ui\images\ui_img_lamp_png.c" />
     <ClCompile Include="..\ui\images\ui_img_level_png.c" />
     <ClCompile Include="..\ui\images\ui_img_light_png.c" />
     <ClCompile Include="..\ui\images\ui_img_main_png.c" />

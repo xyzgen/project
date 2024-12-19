@@ -3869,9 +3869,6 @@
     <ClCompile Include="..\ui\images\ui_img_aroma_png.c">
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\images\ui_img_cloud_png.c">
-      <Filter>lvgl\ui\images</Filter>
-    </ClCompile>
     <ClCompile Include="..\ui\images\ui_img_feed_png.c">
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
@@ -3949,6 +3946,12 @@
     </ClCompile>
     <ClCompile Include="..\ui\screens\ui_more.c">
       <Filter>lvgl\ui\screens</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\images\ui_img_lamp_png.c">
+      <Filter>lvgl\ui\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\images\ui_img_decom_png.c">
+      <Filter>lvgl\ui\images</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
