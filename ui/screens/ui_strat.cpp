@@ -113,11 +113,13 @@ extern "C" void ui_strat_screen_init(void)
         lv_obj_set_style_bg_color(ui_strat[ind], lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
 
         title[ind] = lv_label_create(ui_strat[ind]);
+        lv_obj_add_flag(title[ind], LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_align(title[ind], LV_ALIGN_TOP_LEFT, 16, 16);
         lv_obj_set_style_text_color(title[ind], lv_color_hex(LANDE), LV_PART_MAIN);
         lv_obj_set_style_text_font(title[ind], &ui_font_Chinese16B, LV_PART_MAIN);
 
         lv_obj_t* addBtn = lv_button_create(ui_strat[ind]);
+        lv_obj_add_flag(addBtn, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_size(addBtn, 50, 50);
         lv_obj_set_style_bg_opa(addBtn, LV_OPA_TRANSP, LV_PART_MAIN);
         lv_obj_set_style_shadow_width(addBtn, 0, LV_PART_MAIN);
@@ -128,6 +130,7 @@ extern "C" void ui_strat_screen_init(void)
         lv_obj_set_style_text_font(addIcon, &ui_font_Chinese32B, LV_PART_MAIN);
 
         strat_list[ind] = lv_list_create(ui_strat[ind]);
+        lv_obj_add_flag(strat_list[ind], LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_size(strat_list[ind], lv_pct(100), lv_pct(85));
         lv_obj_set_style_pad_row(strat_list[ind], 5, 0);
         lv_obj_set_align(strat_list[ind], LV_ALIGN_BOTTOM_MID);
@@ -146,6 +149,7 @@ extern "C" void ui_strat_screen_init(void)
         lv_obj_remove_flag(strat_list[ind], LV_OBJ_FLAG_CLICKABLE);
 
         titleIcon[ind] = lv_image_create(ui_strat[ind]);
+        lv_obj_add_flag(titleIcon[ind], LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_align(titleIcon[ind], LV_ALIGN_TOP_RIGHT, -16, 5);
         lv_obj_add_flag(titleIcon[ind], LV_OBJ_FLAG_CLICKABLE);
         lv_obj_remove_flag(titleIcon[ind], LV_OBJ_FLAG_SCROLLABLE);
@@ -255,6 +259,7 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
     auto& strat = g_strat;
     for (auto& st : strat) {
         lv_obj_t* ui_listBtn = lv_button_create(strat_list[scr_where]);
+        lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_align(ui_listBtn, LV_ALIGN_CENTER);
         lv_obj_set_size(ui_listBtn, lv_pct(100), lv_pct(20));
         lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
@@ -264,6 +269,7 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
         lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* ui_listImg = lv_image_create(ui_listBtn);
+        lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_image_set_src(ui_listImg, &ui_img_trash_png);
         lv_obj_align(ui_listImg, LV_ALIGN_LEFT_MID, -5, 0);
         lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags
@@ -272,6 +278,7 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
         lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
+        lv_obj_add_flag(ui_listBtnLab, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_align(ui_listBtnLab, LV_ALIGN_TOP_LEFT, 32, 0);
         //lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
         lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -282,6 +289,7 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
         lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* switch_btn = lv_switch_create(ui_listBtn);
+        lv_obj_add_flag(switch_btn, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_align(switch_btn, LV_ALIGN_RIGHT_MID, 0, 0);
 
         //lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
@@ -291,6 +299,7 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
     }
 
     lv_obj_t* placeholder = lv_obj_create(strat_list[scr_where]);
+    lv_obj_add_flag(placeholder, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_size(placeholder, lv_pct(100), lv_pct(30));
     lv_obj_set_style_bg_opa(placeholder, LV_OPA_TRANSP, LV_PART_MAIN);
     lv_obj_set_style_border_opa(placeholder, LV_OPA_TRANSP, LV_PART_MAIN);

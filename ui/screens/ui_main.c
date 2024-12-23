@@ -21,6 +21,7 @@ void ui_main_screen_init(void)
     lv_obj_set_style_bg_opa(ui_main, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_dateLab = lv_label_create(ui_main);
+    lv_obj_add_flag(ui_dateLab, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_width(ui_dateLab, 128);  /// 1
     lv_obj_set_height(ui_dateLab, 16);   /// 1
     lv_obj_align(ui_dateLab, LV_ALIGN_BOTTOM_LEFT, 16, -60);
@@ -29,6 +30,7 @@ void ui_main_screen_init(void)
     lv_obj_set_style_text_opa(ui_dateLab, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_timeLab = lv_label_create(ui_main);
+    lv_obj_add_flag(ui_timeLab, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_width(ui_timeLab, 128);  /// 1
     lv_obj_set_height(ui_timeLab, 180);   /// 1
     lv_obj_align(ui_timeLab, LV_ALIGN_TOP_LEFT, 16, 20);
@@ -39,6 +41,7 @@ void ui_main_screen_init(void)
 
     // 创建表盘（这里使用一个简单的圆形作为示例）
     lv_obj_t* dial = lv_arc_create(ui_main);
+    lv_obj_add_flag(dial, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_size(dial, 76, 76);
     lv_obj_align(dial, LV_ALIGN_TOP_RIGHT, -20, 20);
     lv_arc_set_bg_angles(dial, 0, 360);
@@ -53,16 +56,19 @@ void ui_main_screen_init(void)
 
     // 创建指针（使用线条作为示例）
     hour_hand = lv_line_create(ui_main);
+    lv_obj_add_flag(hour_hand, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_line_set_points(hour_hand, hour_points, 1);
     lv_obj_set_style_line_width(hour_hand, 3, 0);
     lv_obj_set_style_line_color(hour_hand, lv_color_hex(0xFFFFFF), 0);
 
     minute_hand = lv_line_create(ui_main);
+    lv_obj_add_flag(minute_hand, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_line_set_points(minute_hand, minute_points, 1);
     lv_obj_set_style_line_width(minute_hand, 3, 0);
     lv_obj_set_style_line_color(minute_hand, lv_color_hex(0xFFFFFF), 0);
 
     second_hand = lv_line_create(ui_main);
+    lv_obj_add_flag(second_hand, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_line_set_points(second_hand, second_points, 1);
     lv_obj_set_style_line_width(second_hand, 2, 0);
     lv_obj_set_style_line_color(second_hand, lv_palette_main(LV_PALETTE_RED), 0);
@@ -78,6 +84,7 @@ void ui_main_screen_init(void)
     lv_style_set_bg_color(&style_temp, lv_palette_main(LV_PALETTE_RED));
 
     ui_tempBar = lv_bar_create(ui_main);
+    lv_obj_add_flag(ui_tempBar, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_add_style(ui_tempBar, &style_temp, LV_PART_INDICATOR);
     lv_obj_set_size(ui_tempBar, 8, 90);
     lv_obj_align(ui_tempBar, LV_ALIGN_CENTER, 45, 15);
@@ -87,6 +94,7 @@ void ui_main_screen_init(void)
     lv_obj_set_style_bg_opa(ui_tempBar, 127, LV_PART_MAIN);
 
     lv_obj_t* tempimg = lv_image_create(ui_main);
+    lv_obj_add_flag(tempimg, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_image_set_src(tempimg, &ui_img_temp_png);
     lv_obj_set_width(tempimg, LV_SIZE_CONTENT);  /// 16
     lv_obj_set_height(tempimg, LV_SIZE_CONTENT);   /// 16
@@ -102,6 +110,7 @@ void ui_main_screen_init(void)
     lv_style_set_bg_color(&style_level, lv_color_hex(LANDE));
 
     ui_waterLevelBar = lv_bar_create(ui_main);
+    lv_obj_add_flag(ui_waterLevelBar, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_add_style(ui_waterLevelBar, &style_level, LV_PART_INDICATOR);
     lv_obj_set_size(ui_waterLevelBar, 8, 90);
     lv_obj_align(ui_waterLevelBar, LV_ALIGN_CENTER, 75, 15);
@@ -111,6 +120,7 @@ void ui_main_screen_init(void)
     lv_obj_set_style_bg_opa(ui_waterLevelBar, 127, LV_PART_MAIN);
 
     lv_obj_t* levelimg = lv_image_create(ui_main);
+    lv_obj_add_flag(levelimg, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_image_set_src(levelimg, &ui_img_level_png);
     lv_obj_set_width(levelimg, LV_SIZE_CONTENT);  /// 16
     lv_obj_set_height(levelimg, LV_SIZE_CONTENT);   /// 16
@@ -119,6 +129,7 @@ void ui_main_screen_init(void)
     lv_obj_set_style_image_recolor_opa(levelimg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_mainInfo = lv_image_create(ui_main);
+    lv_obj_add_flag(ui_mainInfo, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_width(ui_mainInfo, 212);
     lv_obj_set_height(ui_mainInfo, 24);
     lv_obj_set_style_radius(ui_mainInfo, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -126,6 +137,7 @@ void ui_main_screen_init(void)
     lv_obj_set_style_bg_color(ui_mainInfo, lv_color_hex(0x909090), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(ui_mainInfo, LV_OPA_80, LV_PART_MAIN);
     ui_mainInfoLab = lv_label_create(ui_mainInfo);
+    lv_obj_add_flag(ui_mainInfoLab, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_width(ui_mainInfoLab, 160);  /// 1
     lv_obj_set_height(ui_mainInfoLab, 16);   /// 1
     lv_obj_set_align(ui_mainInfoLab, LV_ALIGN_CENTER);
