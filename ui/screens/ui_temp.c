@@ -34,10 +34,10 @@ void ui_temp_screen_init(void)
     lv_obj_set_style_border_opa(ui_tempChart, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_line_opa(ui_tempChart, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_line_width(ui_tempChart, 2, LV_PART_ITEMS);
-    lv_obj_set_style_line_opa(ui_tempChart, 255, LV_PART_ITEMS);
-    lv_obj_set_style_bg_opa(ui_tempChart, 0, LV_PART_INDICATOR);
+    lv_obj_set_style_size(ui_tempChart, 0, 0, LV_PART_INDICATOR);
     lv_chart_set_range(ui_tempChart, LV_CHART_AXIS_PRIMARY_Y, 10, 40);
-    lv_chart_set_point_count(ui_tempChart, 80);
+
+    lv_chart_set_point_count(ui_tempChart, 12);
 
 
     ui_tempChart_Yaxis = lv_scale_create(ui_temp);

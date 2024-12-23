@@ -131,52 +131,52 @@ void ui_event_status(lv_event_t* e)
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_BOTTOM) {
-        cur_act = lv_event_get_current_target_obj(e);
-        _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 500, 0, &ui_status_screen_init);
+    //if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_BOTTOM) {
+    //    cur_act = lv_event_get_current_target_obj(e);
+    //    _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 500, 0, &ui_status_screen_init);
+    //}
+
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_obj_t* obj = lv_event_get_target(e);
+        lv_indev_t* indev = lv_event_get_indev(e);
+        lv_point_t p;
+
+        lv_indev_get_point(indev, &p);
+
+        touch_start_pos.x = p.x;
+        touch_start_pos.y = p.y;
+        is_touch_down = true;
     }
 
-    //if (event_code == LV_EVENT_CLICKED)
-    //{
-    //    lv_obj_t* obj = lv_event_get_target(e);
-    //    lv_indev_t* indev = lv_event_get_indev(e);
-    //    lv_point_t p;
+    
+    if (event_code == LV_EVENT_PRESSING)
+    {
+        if (!is_touch_down) return;
 
-    //    lv_indev_get_point(indev, &p);
+        lv_obj_t* obj = lv_event_get_target(e);
+        lv_indev_t* indev = lv_event_get_indev(e);
+        lv_point_t p;
 
-    //    touch_start_pos.x = p.x;
-    //    touch_start_pos.y = p.y;
-    //    is_touch_down = true;
-    //}
+        lv_indev_get_point(indev, &p);
 
-    //
-    //if (event_code == LV_EVENT_PRESSING)
-    //{
-    //    if (!is_touch_down) return;
+        touch_start_pos.x = p.x;
+        touch_start_pos.y = p.y;
+        lv_indev_get_point(indev, &p);
 
-    //    lv_obj_t* obj = lv_event_get_target(e);
-    //    lv_indev_t* indev = lv_event_get_indev(e);
-    //    lv_point_t p;
+        /* 判断是否从屏幕顶部下拉 */
+        if (touch_start_pos.y <= 20 &&  /* 顶部区域，可以根据需要调整 */
+            p.y > touch_start_pos.y &&                   /* 向下拉 */
+            p.y - touch_start_pos.y > 40) { /* 拉下的距离，可以根据需要调整 */
 
-    //    lv_indev_get_point(indev, &p);
-
-    //    touch_start_pos.x = p.x;
-    //    touch_start_pos.y = p.y;
-    //    lv_indev_get_point(indev, &p);
-
-    //    /* 判断是否从屏幕顶部下拉 */
-    //    if (touch_start_pos.y <= 20 &&  /* 顶部区域，可以根据需要调整 */
-    //        p.y > touch_start_pos.y &&                   /* 向下拉 */
-    //        p.y - touch_start_pos.y > 40) { /* 拉下的距离，可以根据需要调整 */
-
-    //        /* 触发事件 */
-    //        is_touch_down = false;
-    //        cur_act = lv_event_get_user_data(e);
-    //        _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_status_screen_init);
-    //    }
-    //}
-    //if (event_code == LV_EVENT_PRESS_LOST)
-    //    is_touch_down = false;
+            /* 触发事件 */
+            is_touch_down = false;
+            cur_act = lv_event_get_user_data(e);
+            _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_status_screen_init);
+        }
+    }
+    if (event_code == LV_EVENT_PRESS_LOST)
+        is_touch_down = false;
 }
 
 //主页界面

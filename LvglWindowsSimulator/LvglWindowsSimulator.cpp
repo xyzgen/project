@@ -68,7 +68,7 @@ int main()
 
     ui_init();
     //lv_demo_widgets();
-    //lv_example_chart_4();
+    //lv_example_chart_8();
 
     while (1)
     {
