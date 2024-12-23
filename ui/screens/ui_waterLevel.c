@@ -53,6 +53,7 @@ static void timer_cb(lv_timer_t* timer) {
         if (ui_waterLevelPanel[i] == NULL)
         {
             ui_waterLevelPanel[i] = lv_obj_create(ui_waterLevel);
+            lv_obj_add_flag(ui_waterLevelPanel[i], LV_OBJ_FLAG_EVENT_BUBBLE);
         }
         lv_obj_remove_flag(ui_waterLevelPanel[i], LV_OBJ_FLAG_HIDDEN);
         lv_obj_set_width(ui_waterLevelPanel[i],5);
