@@ -93,9 +93,9 @@ void ui_control_screen_init(void)
     lv_obj_set_style_text_font(ui_listLab, &ui_font_Chinese16B,LV_PART_MAIN);
 
     ui_controlList = lv_list_create(ui_control);
-    lv_obj_set_size(ui_controlList, lv_pct(100), lv_pct(85));
+    lv_obj_set_size(ui_controlList, lv_pct(100), lv_pct(65));
     lv_obj_set_style_pad_row(ui_controlList, 5, 0);
-    lv_obj_set_align( ui_controlList, LV_ALIGN_BOTTOM_MID);
+    lv_obj_align( ui_controlList, LV_ALIGN_TOP_MID,0,50);
     lv_obj_set_flex_flow(ui_controlList,LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(ui_controlList, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
     lv_obj_set_style_bg_color(ui_controlList, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
@@ -134,7 +134,8 @@ void ui_control_screen_init(void)
         lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
     }
     lv_obj_add_event_cb(ui_control, ui_event_control_back, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_control, ui_event_status, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_control, ui_event_status, LV_EVENT_ALL, ui_control);
+    lv_obj_add_event_cb(ui_control, ui_event_main, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_control, ui_addBtn_cb, LV_EVENT_SCREEN_LOADED, NULL);
 }
 

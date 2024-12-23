@@ -11,11 +11,12 @@
 
 // SCREEN: ui_standby
 void ui_standby_screen_init(void);
-void ui_event_main(lv_event_t* e);
+void ui_event_standy(lv_event_t* e);
 lv_obj_t* ui_standby;
 lv_obj_t* ui_standby_dateLab;
 lv_obj_t* ui_standby_timeLab;
 lv_obj_t* ui_standby_welcomeLab;
+lv_obj_t* ui_backgroundImg;
 
 //SCEEN:ui_status
 void ui_status_screen_init(void);
@@ -29,6 +30,7 @@ lv_obj_t* ui_statusSlider;
 
 // SCREEN: ui_main
 void ui_main_screen_init(void);
+void ui_event_main(lv_event_t* e);
 void ui_event_control(lv_event_t* e);
 lv_obj_t* hour_hand;
 lv_obj_t* minute_hand;
@@ -106,7 +108,7 @@ lv_obj_t *ui____initial_actions0;
 
 //设置背景
 void set_background(lv_obj_t* scr) {
-    lv_obj_t* ui_backgroundImg = lv_img_create(scr);
+    ui_backgroundImg = lv_img_create(scr);
     lv_image_set_src(ui_backgroundImg, &ui_img_main_png);
     lv_obj_set_width(ui_backgroundImg, LV_SIZE_CONTENT);   /// 889
     lv_obj_set_height(ui_backgroundImg, LV_SIZE_CONTENT);    /// 500
@@ -115,113 +117,141 @@ void set_background(lv_obj_t* scr) {
     lv_obj_remove_flag(ui_backgroundImg, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 }
 
-void ui_event_status_return(lv_event_t* e)
+void ui_event_standy(lv_event_t* e)
 {
+    static lv_point_t press_p, release_p;
+
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_TOP) {
-        _ui_screen_change(&cur_act, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, NULL);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_main_screen_init);
     }
+}
+
+void ui_event_status_return(lv_event_t* e)
+{
+    static lv_point_t press_p, release_p;
+
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+    }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (press_p.y > 276 && press_p.y - release_p.y > 20)
+            _ui_screen_change(&cur_act, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, NULL);
+    }
+
 }
 
 void ui_event_status(lv_event_t* e)
 {
-    static lv_point_t touch_start_pos;
-    static bool is_touch_down = false;
+    static lv_point_t press_p, release_p;
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    //if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_BOTTOM) {
-    //    cur_act = lv_event_get_current_target_obj(e);
-    //    _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 500, 0, &ui_status_screen_init);
-    //}
-
     if (event_code == LV_EVENT_PRESSED)
     {
-        lv_obj_t* obj = lv_event_get_target(e);
-        lv_indev_t* indev = lv_event_get_indev(e);
-        lv_point_t p;
-
-        lv_indev_get_point(indev, &p);
-
-        touch_start_pos.x = p.x;
-        touch_start_pos.y = p.y;
-        is_touch_down = true;
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
     }
-
-    
-    if (event_code == LV_EVENT_PRESSING)
+    if (event_code == LV_EVENT_RELEASED)
     {
-        if (!is_touch_down) return;
-
-        lv_obj_t* obj = lv_event_get_target(e);
-        lv_indev_t* indev = lv_event_get_indev(e);
-        lv_point_t p;
-
-        lv_indev_get_point(indev, &p);
-
-        touch_start_pos.x = p.x;
-        touch_start_pos.y = p.y;
-        lv_indev_get_point(indev, &p);
-
-        /* 判断是否从屏幕顶部下拉 */
-        if (touch_start_pos.y <= 20 &&  /* 顶部区域，可以根据需要调整 */
-            p.y > touch_start_pos.y &&                   /* 向下拉 */
-            p.y - touch_start_pos.y > 40) { /* 拉下的距离，可以根据需要调整 */
-
-            /* 触发事件 */
-            is_touch_down = false;
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (press_p.y < 20 && release_p.y - press_p.y > 20)
+        {
             cur_act = lv_event_get_user_data(e);
             _ui_screen_change(&ui_status, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_status_screen_init);
         }
     }
-    if (event_code == LV_EVENT_PRESS_LOST)
-        is_touch_down = false;
 }
 
 //主页界面
 void ui_event_main(lv_event_t* e) {
+    static lv_point_t press_p, release_p;
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE  && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_TOP) {
-        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, &ui_main_screen_init);
-        flag = false;
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+        lv_log("press: %d %d\n", press_p.x, press_p.y);
     }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        lv_log("release: %d %d\n", release_p.x, release_p.y);
 
+        if (press_p.y >276 && press_p.y - release_p.y> 20)
+            _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, &ui_main_screen_init);
+    }
 }
 
 //小程序<=主页=>温度界面
 void ui_event_temp(lv_event_t* e) {
+    static lv_point_t press_p, release_p;
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        _ui_screen_change(&ui_QR, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_QR_screen_init);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+        lv_log("press: %d %d\n", press_p.x, press_p.y);
     }
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-        _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_temp_screen_init);
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        lv_log("release: %d %d\n", release_p.x, release_p.y);
+        if (press_p.x - release_p.x > 30)
+            _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_temp_screen_init);
+        else if (release_p.x - press_p.x > 30)
+            _ui_screen_change(&ui_QR, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_QR_screen_init);
     }
 }
 
 //控制界面
 void ui_event_control(lv_event_t* e) {
+    static lv_point_t press_p, release_p;
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_TOP) {
-        _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_control_screen_init);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+        lv_log("press: %d %d\n", press_p.x, press_p.y);
+    }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        lv_log("release: %d %d\n", release_p.x, release_p.y);
+        if (press_p.y > 276 && press_p.y - release_p.y > 20)
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_control_screen_init);
     }
 }
 
 //控制界面->主页
 void ui_event_control_back(lv_event_t* e) {
 
+    static lv_point_t press_p, release_p;
+
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_BOTTOM) {
-        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_main_screen_init);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+        lv_log("press: %d %d\n", press_p.x, press_p.y);
     }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        lv_log("release: %d %d\n", release_p.x, release_p.y);
+        if (press_p.y > 276 && press_p.y - release_p.y > 20)
+            _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_main_screen_init);
+    }
+
 }
 
 //温度界面
@@ -352,117 +382,147 @@ void ui_event_isolatorBtn(lv_event_t* e) {
 
 //主页<=温度=>水位界面
 void ui_event_waterLevel(lv_event_t* e) {
+    static lv_point_t press_p, release_p;
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-            _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_main_screen_init);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+        lv_log("temp press: %d %d\n", press_p.x, press_p.y);
     }
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-            _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_waterLevel_screen_init);
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        lv_log("temp release: %d %d\n", release_p.x, release_p.y);
+        if (press_p.x - release_p.x > 30)
+            if (flag)
+            {
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                flag = !flag;
+            }
+            else
+                _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_waterLevel_screen_init);            
+        else if (release_p.x - press_p.x > 30)
+            if (flag)
+            {
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                flag = !flag;
+            }
+            else
+                _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_main_screen_init);
     }
+
 }
 
 //温度<=水位=>灯光策略界面
 void ui_event_waterPump(lv_event_t* e) {
 
+    static lv_point_t press_p, release_p;
+
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-            _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_temp_screen_init);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
     }
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-            ui_strat_screen_entry(ui_strat_mode_light, LV_SCR_LOAD_ANIM_MOVE_LEFT);
-        }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (press_p.x - release_p.x > 30)
+            if (flag)
+            {
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                flag = !flag;
+            }
+            else
+                ui_strat_screen_entry(ui_strat_mode_light, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+        else if (release_p.x - press_p.x > 30)
+            if (flag)
+            {
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                flag = !flag;
+            }
+            else
+                _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_temp_screen_init);
+    }
+
 }
 
 //水位<=灯光策略<=>水泵策略<=>...=>主界面
 void ui_event_strat(lv_event_t* e) {
+    static lv_point_t press_p, release_p;
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-        {
-            do {
-                if (ui_strat_mode == 1)
-                {
-                    _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_waterLevel_screen_init);
-                    break;
-                }
-                ui_strat_mode = ui_strat_mode >> 1;
-                if (ui_strat_mode & ui_strat_mode_enable_mask)
-                {
-                    ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_MOVE_RIGHT);
-                    break;
-                }
-            } while (1);
-        }
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
     }
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-        if (flag)
-        {
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
-            flag = !flag;
-        }
-        else
-        {
-            do {
-                if ((ui_strat_mode << 1) & ui_strat_mode_max)
-                {
-                    _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_main_screen_init);
-                    break;
-                }
-                ui_strat_mode = ui_strat_mode << 1;
-                if (ui_strat_mode & ui_strat_mode_enable_mask)
-                {
-                    ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_MOVE_LEFT);
-                    break;
-                }
-            } while (1);
-        }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (release_p.x - press_p.x > 30)
+            if (flag)
+            {
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                flag = !flag;
+            }
+            else
+                do {
+                    if (ui_strat_mode == 1)
+                    {
+                        _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_waterLevel_screen_init);
+                        break;
+                    }
+                    ui_strat_mode = ui_strat_mode >> 1;
+                    if (ui_strat_mode & ui_strat_mode_enable_mask)
+                    {
+                        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_MOVE_RIGHT);
+                        break;
+                    }
+                } while (1);
+        else if (press_p.x - release_p.x > 30)
+            if (flag)
+            {
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                flag = !flag;
+            }
+            else
+                do {
+                    if ((ui_strat_mode << 1) & ui_strat_mode_max)
+                    {
+                        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_main_screen_init);
+                        break;
+                    }
+                    ui_strat_mode = ui_strat_mode << 1;
+                    if (ui_strat_mode & ui_strat_mode_enable_mask)
+                    {
+                        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_MOVE_LEFT);
+                        break;
+                    }
+                } while (1);
+
     }
+
 }
 
 //具体策略界面=>返回策略界面
 void ui_event_stratDetail(lv_event_t* e) {
 
+    static lv_point_t press_p, release_p;
+
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_OUT_BOTTOM);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
     }
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-        ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_OUT_BOTTOM);
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (press_p.x - release_p.x > 30 || release_p.x - press_p.x > 30)
+            ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_OUT_BOTTOM);
     }
 }
 

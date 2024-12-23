@@ -21,6 +21,7 @@ void ui_standby_screen_init(void)
     char time_str[16];
 
     ui_standby_dateLab = lv_label_create(ui_standby);
+    lv_obj_add_flag(ui_standby_dateLab, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_align(ui_standby_dateLab, LV_ALIGN_TOP_MID,0,16);
     
     lv_label_set_text_fmt(ui_standby_dateLab, "%d %s",timeinfo.tm_mday, weekday_cn[timeinfo.tm_wday]);
@@ -28,6 +29,7 @@ void ui_standby_screen_init(void)
     lv_obj_set_style_text_font(ui_standby_dateLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_standby_timeLab = lv_label_create(ui_standby);
+    lv_obj_add_flag(ui_standby_timeLab, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_align(ui_standby_timeLab,LV_ALIGN_TOP_MID, 0, 48);
     strftime(time_str, sizeof(time_str), "%H:%M", &timeinfo);
     lv_label_set_text(ui_standby_timeLab, time_str);
@@ -35,12 +37,13 @@ void ui_standby_screen_init(void)
     lv_obj_set_style_text_font(ui_standby_timeLab, &ui_font_Chinese32B, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_standby_welcomeLab = lv_label_create(ui_standby);
+    lv_obj_add_flag(ui_standby_welcomeLab, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_align(ui_standby_welcomeLab,LV_ALIGN_BOTTOM_MID, 0, -16);
     lv_label_set_text(ui_standby_welcomeLab, "欢迎您 轻松养鱼##天");
     lv_obj_set_style_text_color(ui_standby_welcomeLab, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_standby_welcomeLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_add_event_cb(ui_standby, ui_event_main, LV_EVENT_ALL,NULL);
+    lv_obj_add_event_cb(ui_backgroundImg, ui_event_standy, LV_EVENT_ALL,NULL);
     lv_timer_t* timer = lv_timer_create(timer_cb, 1000, ui_standby); // 每秒触发一次
 }
 

@@ -28,11 +28,12 @@ extern "C" {
 
 // SCREEN: ui_standby
 void ui_standby_screen_init(void);
-void ui_event_main(lv_event_t* e);
+void ui_event_standy(lv_event_t* e);
 extern lv_obj_t* ui_standby;
 extern lv_obj_t* ui_standby_dateLab;
 extern lv_obj_t* ui_standby_timeLab;
 extern lv_obj_t* ui_standby_welcomeLab;
+extern lv_obj_t* ui_backgroundImg;
 
 //SCEEN:ui_status
 void ui_status_screen_init(void);
@@ -47,6 +48,7 @@ extern lv_obj_t* ui_statusSlider;
 
 // SCREEN: ui_main
 void ui_main_screen_init(void);
+void ui_event_main(lv_event_t* e);
 void ui_event_control(lv_event_t* e);
 extern lv_obj_t* hour_hand;
 extern lv_obj_t* minute_hand;
