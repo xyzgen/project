@@ -114,12 +114,13 @@ static void time_select_event_cb(lv_event_t* e) {
 
     /* Create the mask to make the top and bottom part of roller faded.
     * The width and height are empirical values for simplicity*/
-    LV_DRAW_BUF_DEFINE_STATIC(mask, 130, 150, LV_COLOR_FORMAT_L8);
-    LV_DRAW_BUF_INIT_STATIC(mask);
+//    int mask = 0;
+//     LV_DRAW_BUF_DEFINE_STATIC(mask, 130, 150, LV_COLOR_FORMAT_L8);
+//     LV_DRAW_BUF_INIT_STATIC(mask);
 
-    generate_mask(&mask);
-    lv_obj_set_style_bitmap_mask_src(ui_hourRoller, &mask, 0);
-    lv_obj_set_style_bitmap_mask_src(ui_minRoller, &mask, 0);
+//     generate_mask(&mask);
+//     lv_obj_set_style_bitmap_mask_src(ui_hourRoller, &mask, 0);
+//     lv_obj_set_style_bitmap_mask_src(ui_minRoller, &mask, 0);
 
     // 创建“确定”和“取消”按钮
     lv_obj_t* btn_confirm = lv_btn_create(time_picker_dialog);
