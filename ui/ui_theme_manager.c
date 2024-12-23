@@ -81,7 +81,7 @@ lv_style_value_t _ui_style_value_convert (lv_style_prop_t property, ui_style_var
         Style_Value.color = lv_color_hex(value);
     }
     else if (property==LV_STYLE_BG_GRAD || property==LV_STYLE_BG_IMAGE_SRC || property==LV_STYLE_ARC_IMAGE_SRC || property==LV_STYLE_TEXT_FONT
-             || property==LV_STYLE_COLOR_FILTER_DSC || property==LV_STYLE_ANIM || property==LV_STYLE_TRANSITION || property==LV_STYLE_BITMAP_MASK_SRC) {
+             || property==LV_STYLE_COLOR_FILTER_DSC || property==LV_STYLE_ANIM || property==LV_STYLE_TRANSITION) {
         Style_Value.ptr = (void*)(uintptr_t) value;
     }
     else Style_Value.num = value;

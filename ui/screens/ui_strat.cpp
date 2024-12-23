@@ -67,29 +67,12 @@ struct led_tmp_t {
     bool activated = false;
     uint32_t duration;
 };
-std::vector<led_tmp_t> led_tmp_set;
 struct led_filter {
     static constexpr size_t sum = sizeof(led_correspond_pin);
     inline static uint8_t value[sum] = {};
     inline static uint8_t target[sum] = {};
     led_filter() = delete;
 };
-static uint32_t getSecsDay()
-{
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
-
-    std::tm local_tm = *std::localtime(&now_time_t);
-
-    local_tm.tm_hour = 0;
-    local_tm.tm_min = 0;
-    local_tm.tm_sec = 0;
-
-    auto today_midnight = std::chrono::system_clock::from_time_t(std::mktime(&local_tm));
-
-    return std::chrono::duration_cast<std::chrono::seconds>(now - today_midnight).count();
-}
 
 
 
@@ -111,8 +94,8 @@ static std::vector<led_strategy_t> strat_p_list;
 static bool isEnabled = false;
 
 static void rerender();
-extern "C" static void ui_strat_temp_cb(lv_event_t* e);
-extern "C" static void ui_strat_add_cb(lv_event_t* e);
+extern "C" void ui_strat_temp_cb(lv_event_t* e);
+extern "C" void ui_strat_add_cb(lv_event_t* e);
 
 extern "C" void ui_strat_screen_init(void)
 {
@@ -175,27 +158,27 @@ extern "C" void ui_strat_screen_init(void)
     }
 }
 
-extern "C" static void ui_strat_detail_click_cb(lv_event_t* e)
+extern "C" void ui_strat_detail_click_cb(lv_event_t* e)
 {
 
 }
 
-extern "C" static void ui_strat_detail_delete_cb(lv_event_t* e)
+extern "C" void ui_strat_detail_delete_cb(lv_event_t* e)
 {
 
 }
 
-extern "C" static void ui_strat_detail_switch_cb(lv_event_t* e)
+extern "C" void ui_strat_detail_switch_cb(lv_event_t* e)
 {
 
 }
 
-extern "C" static void ui_strat_temp_cb(lv_event_t* e)
+extern "C" void ui_strat_temp_cb(lv_event_t* e)
 {
 
 }
 
-extern "C" static void ui_strat_add_cb(lv_event_t* e)
+extern "C" void ui_strat_add_cb(lv_event_t* e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
