@@ -54,7 +54,7 @@ void ui_status_screen_init(void)
     ui_statusSlider = lv_slider_create(ui_status);
     lv_obj_add_flag(ui_statusSlider, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_set_size(ui_statusSlider, 220, 50);
-    lv_obj_align(ui_statusSlider,LV_ALIGN_BOTTOM_MID,0,-86);
+    lv_obj_align(ui_statusSlider,LV_ALIGN_CENTER,0,0);
     lv_slider_set_value(ui_statusSlider, 127, LV_ANIM_OFF);
     lv_slider_set_range(ui_statusSlider, 0, 255);
     lv_obj_set_style_bg_color(ui_statusSlider, lv_color_hex(0xFFFFFF), LV_PART_MAIN);

@@ -143,7 +143,7 @@ void ui_event_status_return(lv_event_t* e)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
         if (press_p.y > 276 && press_p.y - release_p.y > 20)
-            _ui_screen_change(&cur_act, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, NULL);
+            _ui_screen_change(&cur_act, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, NULL);
     }
 
 }
@@ -178,12 +178,15 @@ void ui_event_main(lv_event_t* e) {
     if (event_code == LV_EVENT_PRESSED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &press_p);
+        lv_log("%d %d\n", press_p.x, press_p.y);
+
     }
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.y >276 && press_p.y - release_p.y> 20)
-            _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, &ui_main_screen_init);
+        lv_log("%d %d\n", release_p.x, release_p.y);
+        if (press_p.y >266 && press_p.y - release_p.y> 20)
+            _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_main_screen_init);
     }
 }
 
@@ -200,9 +203,9 @@ void ui_event_temp(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.x - release_p.x > 30)
+        if (press_p.x - release_p.x > 20)
             _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_temp_screen_init);
-        else if (release_p.x - press_p.x > 30)
+        else if (release_p.x - press_p.x > 20)
             _ui_screen_change(&ui_QR, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_QR_screen_init);
     }
 }
@@ -308,6 +311,21 @@ void ui_event_moreBtn(lv_event_t* e) {
     }
 }
 
+void ui_event_controlList(lv_event_t* e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    static lv_point_t press_p, release_p;
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+    }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+
+    }
+}
+
 //二维码=>主页界面
 void ui_event_QR(lv_event_t* e) {
     static lv_point_t press_p, release_p;
@@ -321,8 +339,8 @@ void ui_event_QR(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.y > 276 && press_p.y - release_p.y >30)
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+        if (press_p.x>220&&press_p.x-release_p.x>20)
+            _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_main_screen_init);
 
     }
 }
@@ -340,8 +358,8 @@ void ui_event_more(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.x - release_p.x > 30 || release_p.x - press_p.x > 30)
-            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+        if (press_p.x - release_p.x > 20 || release_p.x - press_p.x > 20)
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
 
     }
 }
@@ -399,18 +417,18 @@ void ui_event_waterLevel(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.x - release_p.x > 30)
+        if (press_p.x - release_p.x > 20)
             if (flag)
             {
-                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
                 flag = !flag;
             }
             else
                 _ui_screen_change(&ui_waterLevel, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_waterLevel_screen_init);            
-        else if (release_p.x - press_p.x > 30)
+        else if (release_p.x - press_p.x > 20)
             if (flag)
             {
-                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
                 flag = !flag;
             }
             else
@@ -433,18 +451,18 @@ void ui_event_waterPump(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.x - release_p.x > 30)
+        if (press_p.x - release_p.x > 20)
             if (flag)
             {
-                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
                 flag = !flag;
             }
             else
                 ui_strat_screen_entry(ui_strat_mode_light, LV_SCR_LOAD_ANIM_MOVE_LEFT);
-        else if (release_p.x - press_p.x > 30)
+        else if (release_p.x - press_p.x > 20)
             if (flag)
             {
-                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
                 flag = !flag;
             }
             else
@@ -453,7 +471,7 @@ void ui_event_waterPump(lv_event_t* e) {
 
 }
 
-//水位<=灯光策略<=>水泵策略<=>...=>二维码
+//水位<=灯光策略<=>水泵策略<=>...
 void ui_event_strat(lv_event_t* e) {
     static lv_point_t press_p, release_p;
 
@@ -466,10 +484,10 @@ void ui_event_strat(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (release_p.x - press_p.x > 30)
+        if (release_p.x - press_p.x > 20)
             if (flag)
             {
-                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
                 flag = !flag;
             }
             else
@@ -486,17 +504,16 @@ void ui_event_strat(lv_event_t* e) {
                         break;
                     }
                 } while (1);
-        else if (press_p.x - release_p.x > 30)
+        else if (press_p.x - release_p.x > 20)
             if (flag)
             {
-                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+                _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_control_screen_init);
                 flag = !flag;
             }
             else
                 do {
                     if ((ui_strat_mode << 1) & ui_strat_mode_max)
                     {
-                        _ui_screen_change(&ui_QR, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_QR_screen_init);
                         break;
                     }
                     ui_strat_mode = ui_strat_mode << 1;
@@ -525,8 +542,8 @@ void ui_event_stratDetail(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.x - release_p.x > 30 || release_p.x - press_p.x > 30)
-            ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_OUT_BOTTOM);
+        if (press_p.x - release_p.x > 20 || release_p.x - press_p.x > 20)
+            ui_strat_screen_entry(ui_strat_mode, LV_SCR_LOAD_ANIM_MOVE_BOTTOM);
     }
 }
 

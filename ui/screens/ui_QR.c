@@ -43,5 +43,6 @@ void ui_QR_screen_init(void)
     }
 
     lv_obj_add_event_cb(ui_QR, ui_event_main, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_QR, ui_event_QR, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_QR, ui_event_status, LV_EVENT_ALL, ui_QR);
 }

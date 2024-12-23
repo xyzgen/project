@@ -82,6 +82,7 @@ void ui_event_feederBtn(lv_event_t* e);
 void ui_event_sanitizerBtn(lv_event_t* e);
 void ui_event_isolatorBtn(lv_event_t* e);
 void ui_event_control_back(lv_event_t* e);
+void ui_event_controlList(lv_event_t* e);
 extern lv_obj_t* ui_control;
 extern lv_obj_t* ui_controlList;
 

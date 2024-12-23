@@ -110,36 +110,8 @@ void ui_control_screen_init(void)
     lv_obj_set_style_pad_row(ui_controlList, 0, LV_PART_SCROLLBAR| LV_STATE_DEFAULT);
     lv_obj_set_style_pad_column(ui_controlList, 0, LV_PART_SCROLLBAR| LV_STATE_DEFAULT);
 
-    for (module_t* pos = module->next;pos != module;pos = pos->next) {
-        lv_obj_t* ui_listBtn = lv_button_create(ui_controlList);
-        lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_obj_set_align(ui_listBtn, LV_ALIGN_CENTER);
-        lv_obj_set_size(ui_listBtn, lv_pct(100),lv_pct(20));
-        lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
-        lv_obj_remove_flag(ui_listBtn, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-        lv_obj_set_style_bg_color(ui_listBtn, lv_color_hex(0x909090), LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_opa(ui_listBtn, 127, LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-        lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
-        lv_obj_add_flag(ui_listBtnLab, LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_obj_align(ui_listBtnLab, LV_ALIGN_LEFT_MID,32,0);
-        lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
-        lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-        lv_obj_t* ui_listImg = lv_image_create(ui_listBtn);
-        lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_image_set_src(ui_listImg, pos->mod->img);
-        lv_obj_set_align(ui_listImg, LV_ALIGN_LEFT_MID);
-        lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags
-        lv_obj_remove_flag(ui_listImg, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-        lv_obj_set_style_image_recolor(ui_listImg, lv_color_hex(LANDE), LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
-    }
     lv_obj_add_event_cb(ui_control, ui_event_control_back, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_control, ui_event_status, LV_EVENT_ALL, ui_control);
-    lv_obj_add_event_cb(ui_control, ui_event_main, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_control, ui_addBtn_cb, LV_EVENT_SCREEN_LOADED, NULL);
 }
 
@@ -162,6 +134,7 @@ static void ui_addBtn_cb(lv_event_t* e)
 
     for (pos = module->next;pos != module;pos = pos->next) {
         lv_obj_t* ui_listBtn = lv_button_create(ui_controlList);
+        lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_align(ui_listBtn, LV_ALIGN_CENTER);
         lv_obj_set_size(ui_listBtn, lv_pct(100), lv_pct(20));
         lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
@@ -171,17 +144,20 @@ static void ui_addBtn_cb(lv_event_t* e)
         lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
+        lv_obj_add_flag(ui_listBtnLab, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_align(ui_listBtnLab, LV_ALIGN_LEFT_MID, 32, 0);
         lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
         lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* ui_listImg = lv_image_create(ui_listBtn);
+        lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_image_set_src(ui_listImg, pos->mod->img);
         lv_obj_set_align(ui_listImg, LV_ALIGN_LEFT_MID);
         lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags
         lv_obj_remove_flag(ui_listImg, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
         lv_obj_set_style_image_recolor(ui_listImg, lv_color_hex(LANDE), LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_add_event_cb(ui_listBtn, ui_event_controlList, LV_EVENT_ALL, NULL);
         lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
     }
 }
