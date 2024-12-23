@@ -79,6 +79,11 @@ lv_obj_t* ui_waterLevelLab;
 // SCREEN: ui_strat
 enum ui_strat_mode_t ui_strat_mode;
 unsigned int ui_strat_mode_enable_mask = 1 << 0 | 1 << 1;
+lv_obj_t* ui_hourRoller;
+lv_obj_t* ui_minRoller;
+lv_obj_t* ui_wdayRoller;
+
+
 // CUSTOM VARIABLES
 
 // SCREEN: ui_strat_detail

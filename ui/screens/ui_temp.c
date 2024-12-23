@@ -33,9 +33,11 @@ void ui_temp_screen_init(void)
     lv_obj_set_style_bg_opa(ui_tempChart, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_tempChart, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_line_opa(ui_tempChart, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_line_width(ui_tempChart, 2, LV_PART_ITEMS);
+    lv_obj_set_style_line_opa(ui_tempChart, 255, LV_PART_ITEMS);
     lv_obj_set_style_bg_opa(ui_tempChart, 0, LV_PART_INDICATOR);
     lv_chart_set_range(ui_tempChart, LV_CHART_AXIS_PRIMARY_Y, 10, 40);
-    lv_chart_set_point_count(ui_tempChart, 12);
+    lv_chart_set_point_count(ui_tempChart, 80);
 
 
     ui_tempChart_Yaxis = lv_scale_create(ui_temp);
@@ -56,7 +58,7 @@ void ui_temp_screen_init(void)
     lv_scale_set_total_tick_count(ui_tempChart_Yaxis, (5 > 0 ? 5 - 1 : 0) * 2 + 1);
     lv_scale_set_major_tick_every(ui_tempChart_Yaxis, 2 >= 1 ? 2 : 1);
 
-    ui_tempSeries = lv_chart_add_series(ui_tempChart, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
+    ui_tempSeries = lv_chart_add_series(ui_tempChart, lv_palette_main(LV_PALETTE_PINK), LV_CHART_AXIS_PRIMARY_Y);
 
 
 
@@ -97,6 +99,14 @@ static void timer_cb(lv_timer_t* timer) {
         sum += data[i];
     }
     lv_label_set_text_fmt(ui_temp_ave_Lab, "%d", sum/i);
+
+    uint16_t p = lv_chart_get_point_count(ui_tempChart);
+    uint16_t s = lv_chart_get_x_start_point(ui_tempChart, ui_tempSeries);
+    int32_t* a = lv_chart_get_y_array(ui_tempChart, ui_tempSeries);
+
+    a[(s + 1) % p] = LV_CHART_POINT_NONE;
+    a[(s + 2) % p] = LV_CHART_POINT_NONE;
+    a[(s + 2) % p] = LV_CHART_POINT_NONE;
 
     lv_chart_refresh(ui_tempChart);
     index++;
