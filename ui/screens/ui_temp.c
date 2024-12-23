@@ -31,7 +31,7 @@ void ui_temp_screen_init(void)
 
     ui_tempChart = lv_chart_create(ui_temp);
     lv_obj_add_flag(ui_tempChart, LV_OBJ_FLAG_EVENT_BUBBLE);
-    lv_obj_set_size(ui_tempChart, 170, 150);
+    lv_obj_set_size(ui_tempChart, 200, 150);
     lv_obj_center(ui_tempChart);
     lv_chart_set_type(ui_tempChart, LV_CHART_TYPE_LINE);   /*Show lines and points too*/
     lv_obj_set_style_bg_opa(ui_tempChart, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -39,9 +39,9 @@ void ui_temp_screen_init(void)
     lv_obj_set_style_line_opa(ui_tempChart, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_line_width(ui_tempChart, 2, LV_PART_ITEMS);
     lv_obj_set_style_size(ui_tempChart, 0, 0, LV_PART_INDICATOR);
-    lv_chart_set_range(ui_tempChart, LV_CHART_AXIS_PRIMARY_Y, 10, 40);
+    lv_chart_set_range(ui_tempChart, LV_CHART_AXIS_PRIMARY_Y, 0, 60);
 
-    lv_chart_set_point_count(ui_tempChart, 12);
+    lv_chart_set_point_count(ui_tempChart, 24);
 
 
     ui_tempChart_Yaxis = lv_scale_create(ui_temp);
@@ -89,7 +89,7 @@ void ui_temp_screen_init(void)
 }
 
 static int get_temp() {
-    return lv_rand(10, 40); // 假设水位在0到100之间
+    return lv_rand(10, 40);
 }
 
 //每天更新图表
@@ -97,11 +97,12 @@ static void timer_cb(lv_timer_t* timer) {
 
     static int data[12],index=0;
     int temp = get_temp(),sum = 0,i;
-    data[index % 12] = temp;
+    index %= 12;
+    data[index] = temp;
     lv_label_set_text_fmt(ui_tempLab, "%d ℃", temp);
 
     lv_chart_set_next_value(ui_tempChart, ui_tempSeries, temp);
-    for (i = 0;data[i] != 0;i++)
+    for (i = 0;data[i] != 0&&i<12;i++)
     {
         sum += data[i];
     }

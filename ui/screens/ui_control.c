@@ -93,9 +93,10 @@ void ui_control_screen_init(void)
     lv_obj_set_style_text_font(ui_listLab, &ui_font_Chinese16B,LV_PART_MAIN);
 
     ui_controlList = lv_list_create(ui_control);
-    lv_obj_set_size(ui_controlList, lv_pct(100), lv_pct(65));
+    lv_obj_add_flag(ui_controlList, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_set_size(ui_controlList, lv_pct(100), lv_pct(85));
     lv_obj_set_style_pad_row(ui_controlList, 5, 0);
-    lv_obj_align( ui_controlList, LV_ALIGN_TOP_MID,0,50);
+    lv_obj_set_align( ui_controlList, LV_ALIGN_BOTTOM_MID);
     lv_obj_set_flex_flow(ui_controlList,LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_flex_align(ui_controlList, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
     lv_obj_set_style_bg_color(ui_controlList, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
@@ -111,6 +112,7 @@ void ui_control_screen_init(void)
 
     for (module_t* pos = module->next;pos != module;pos = pos->next) {
         lv_obj_t* ui_listBtn = lv_button_create(ui_controlList);
+        lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_align(ui_listBtn, LV_ALIGN_CENTER);
         lv_obj_set_size(ui_listBtn, lv_pct(100),lv_pct(20));
         lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
@@ -120,11 +122,13 @@ void ui_control_screen_init(void)
         lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
+        lv_obj_add_flag(ui_listBtnLab, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_align(ui_listBtnLab, LV_ALIGN_LEFT_MID,32,0);
         lv_label_set_text_fmt(ui_listBtnLab, "%s", pos->mod->name);
         lv_obj_set_style_text_font(ui_listBtnLab, &ui_font_Chinese16B, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* ui_listImg = lv_image_create(ui_listBtn);
+        lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_image_set_src(ui_listImg, pos->mod->img);
         lv_obj_set_align(ui_listImg, LV_ALIGN_LEFT_MID);
         lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags

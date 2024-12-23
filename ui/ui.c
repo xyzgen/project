@@ -178,13 +178,10 @@ void ui_event_main(lv_event_t* e) {
     if (event_code == LV_EVENT_PRESSED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &press_p);
-        lv_log("press: %d %d\n", press_p.x, press_p.y);
     }
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        lv_log("release: %d %d\n", release_p.x, release_p.y);
-
         if (press_p.y >276 && press_p.y - release_p.y> 20)
             _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_OUT_TOP, 500, 0, &ui_main_screen_init);
     }
@@ -199,12 +196,10 @@ void ui_event_temp(lv_event_t* e) {
     if (event_code == LV_EVENT_PRESSED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &press_p);
-        lv_log("press: %d %d\n", press_p.x, press_p.y);
     }
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        lv_log("release: %d %d\n", release_p.x, release_p.y);
         if (press_p.x - release_p.x > 30)
             _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_temp_screen_init);
         else if (release_p.x - press_p.x > 30)
@@ -221,12 +216,10 @@ void ui_event_control(lv_event_t* e) {
     if (event_code == LV_EVENT_PRESSED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &press_p);
-        lv_log("press: %d %d\n", press_p.x, press_p.y);
     }
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        lv_log("release: %d %d\n", release_p.x, release_p.y);
         if (press_p.y > 276 && press_p.y - release_p.y > 20)
             _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_control_screen_init);
     }
@@ -242,12 +235,10 @@ void ui_event_control_back(lv_event_t* e) {
     if (event_code == LV_EVENT_PRESSED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &press_p);
-        lv_log("press: %d %d\n", press_p.x, press_p.y);
     }
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        lv_log("release: %d %d\n", release_p.x, release_p.y);
         if (press_p.y > 276 && press_p.y - release_p.y > 20)
             _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_main_screen_init);
     }
@@ -319,24 +310,39 @@ void ui_event_moreBtn(lv_event_t* e) {
 
 //二维码=>主页界面
 void ui_event_QR(lv_event_t* e) {
+    static lv_point_t press_p, release_p;
+
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_CLICKED) {
-        flag = true;
-        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_main_screen_init);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+    }
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (press_p.y > 276 && press_p.y - release_p.y >30)
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+
     }
 }
 
 //控制<=更多=>控制
 void ui_event_more(lv_event_t* e) {
+    static lv_point_t press_p, release_p;
 
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_RIGHT) {
-        _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+    if (event_code == LV_EVENT_PRESSED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &press_p);
     }
-    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_LEFT) {
-       _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+    if (event_code == LV_EVENT_RELEASED)
+    {
+        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (press_p.x - release_p.x > 30 || release_p.x - press_p.x > 30)
+            _ui_screen_change(&ui_control, LV_SCR_LOAD_ANIM_OUT_RIGHT, 500, 0, &ui_control_screen_init);
+
     }
 }
 
@@ -389,12 +395,10 @@ void ui_event_waterLevel(lv_event_t* e) {
     if (event_code == LV_EVENT_PRESSED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &press_p);
-        lv_log("temp press: %d %d\n", press_p.x, press_p.y);
     }
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        lv_log("temp release: %d %d\n", release_p.x, release_p.y);
         if (press_p.x - release_p.x > 30)
             if (flag)
             {
@@ -449,7 +453,7 @@ void ui_event_waterPump(lv_event_t* e) {
 
 }
 
-//水位<=灯光策略<=>水泵策略<=>...=>主界面
+//水位<=灯光策略<=>水泵策略<=>...=>二维码
 void ui_event_strat(lv_event_t* e) {
     static lv_point_t press_p, release_p;
 
@@ -492,7 +496,7 @@ void ui_event_strat(lv_event_t* e) {
                 do {
                     if ((ui_strat_mode << 1) & ui_strat_mode_max)
                     {
-                        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_main_screen_init);
+                        _ui_screen_change(&ui_QR, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_QR_screen_init);
                         break;
                     }
                     ui_strat_mode = ui_strat_mode << 1;
