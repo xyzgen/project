@@ -209,6 +209,16 @@ void ui_event_control(lv_event_t* e) {
     }
 }
 
+//控制界面->主页
+void ui_event_control_back(lv_event_t* e) {
+
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if (event_code == LV_EVENT_GESTURE && lv_indev_get_gesture_dir(lv_indev_active()) == LV_DIR_BOTTOM) {
+        _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 500, 0, &ui_main_screen_init);
+    }
+}
+
 //温度界面
 void ui_event_tempBtn(lv_event_t* e) {
 

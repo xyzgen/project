@@ -2843,6 +2843,7 @@
     <ClCompile Include="..\ui\images\ui_img_pump_shell_png.c" />
     <ClCompile Include="..\ui\images\ui_img_setup_png.c" />
     <ClCompile Include="..\ui\images\ui_img_temp_png.c" />
+    <ClCompile Include="..\ui\images\ui_img_trash_png.c" />
     <ClCompile Include="..\ui\images\ui_img_uv_png.c" />
     <ClCompile Include="..\ui\screens\ui_control.c" />
     <ClCompile Include="..\ui\screens\ui_main.c" />

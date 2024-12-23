@@ -79,6 +79,7 @@ void ui_event_AromatherapyBtn(lv_event_t* e);
 void ui_event_feederBtn(lv_event_t* e);
 void ui_event_sanitizerBtn(lv_event_t* e);
 void ui_event_isolatorBtn(lv_event_t* e);
+void ui_event_control_back(lv_event_t* e);
 extern lv_obj_t* ui_control;
 extern lv_obj_t* ui_controlList;
 
@@ -152,6 +153,7 @@ LV_IMG_DECLARE(ui_img_more_png);   // assets/more.png
 LV_IMG_DECLARE(ui_img_lightboard_png);
 LV_IMG_DECLARE(ui_img_pump_fan_png);
 LV_IMG_DECLARE(ui_img_pump_shell_png);
+LV_IMG_DECLARE(ui_img_trash_png);
 
 
 

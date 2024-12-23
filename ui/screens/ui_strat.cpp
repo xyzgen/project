@@ -107,6 +107,7 @@ static uint8_t scr_where = 0;
 static lv_obj_t* title[2];
 static lv_obj_t* titleIcon[2];
 static lv_obj_t* strat_list[2];
+static std::vector<led_strategy_t> strat_p_list;
 static bool isEnabled = false;
 
 static void rerender();
@@ -133,6 +134,16 @@ extern "C" void ui_strat_screen_init(void)
         lv_obj_set_style_text_color(title[ind], lv_color_hex(LANDE), LV_PART_MAIN);
         lv_obj_set_style_text_font(title[ind], &ui_font_Chinese16B, LV_PART_MAIN);
 
+        lv_obj_t* addBtn = lv_button_create(ui_strat[ind]);
+        lv_obj_set_size(addBtn, 50, 50);
+        lv_obj_set_style_bg_opa(addBtn, LV_OPA_TRANSP, LV_PART_MAIN);
+        lv_obj_set_style_shadow_width(addBtn, 0, LV_PART_MAIN);
+        lv_obj_align(addBtn, LV_ALIGN_BOTTOM_RIGHT, -5, -5);
+        lv_obj_t* addIcon = lv_label_create(addBtn);
+        lv_label_set_text(addIcon, "+");
+        lv_obj_set_style_text_color(addIcon, lv_color_hex(0xffffff), LV_PART_MAIN);
+        lv_obj_set_style_text_font(addIcon, &ui_font_Chinese32B, LV_PART_MAIN);
+
         strat_list[ind] = lv_list_create(ui_strat[ind]);
         lv_obj_set_size(strat_list[ind], lv_pct(100), lv_pct(85));
         lv_obj_set_style_pad_row(strat_list[ind], 5, 0);
@@ -149,22 +160,13 @@ extern "C" void ui_strat_screen_init(void)
         lv_obj_set_style_pad_bottom(strat_list[ind], 0, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
         lv_obj_set_style_pad_row(strat_list[ind], 0, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
         lv_obj_set_style_pad_column(strat_list[ind], 0, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
+        lv_obj_remove_flag(strat_list[ind], LV_OBJ_FLAG_CLICKABLE);
 
         titleIcon[ind] = lv_image_create(ui_strat[ind]);
         lv_obj_align(titleIcon[ind], LV_ALIGN_TOP_RIGHT, -16, 5);
         lv_obj_add_flag(titleIcon[ind], LV_OBJ_FLAG_CLICKABLE);
         lv_obj_remove_flag(titleIcon[ind], LV_OBJ_FLAG_SCROLLABLE);
         lv_obj_set_style_image_recolor_opa(titleIcon[ind], 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-        lv_obj_t* addBtn = lv_button_create(ui_strat[ind]);
-        lv_obj_set_size(addBtn, 50, 50);
-        lv_obj_set_style_bg_opa(addBtn, LV_OPA_TRANSP, LV_PART_MAIN);
-        lv_obj_align(addBtn, LV_ALIGN_BOTTOM_RIGHT, -5, -5);
-        lv_obj_set_style_shadow_width(addBtn, 0, LV_PART_MAIN);
-        lv_obj_t* addIcon = lv_label_create(addBtn);
-        lv_label_set_text(addIcon, "+");
-        lv_obj_set_style_text_color(addIcon, lv_color_hex(0xffffff), LV_PART_MAIN);
-        lv_obj_set_style_text_font(addIcon, &ui_font_Chinese32B, LV_PART_MAIN);
 
         lv_obj_add_event_cb(addBtn, ui_strat_add_cb, LV_EVENT_ALL, NULL);
         lv_obj_add_event_cb(titleIcon[ind], ui_strat_temp_cb, LV_EVENT_ALL, NULL);
@@ -174,6 +176,16 @@ extern "C" void ui_strat_screen_init(void)
 }
 
 extern "C" static void ui_strat_detail_click_cb(lv_event_t* e)
+{
+
+}
+
+extern "C" static void ui_strat_detail_delete_cb(lv_event_t* e)
+{
+
+}
+
+extern "C" static void ui_strat_detail_switch_cb(lv_event_t* e)
 {
 
 }
@@ -190,6 +202,8 @@ extern "C" static void ui_strat_add_cb(lv_event_t* e)
     if (event_code == LV_EVENT_CLICKED)
         _ui_screen_change(&ui_stratDetail, LV_SCR_LOAD_ANIM_OVER_TOP, 300, 0, &ui_stratDetail_screen_init);
 }
+
+//void 
 
 extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t anim)
 {
@@ -262,9 +276,17 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
         lv_obj_set_size(ui_listBtn, lv_pct(100), lv_pct(20));
         lv_obj_add_flag(ui_listBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);   /// Flags
         lv_obj_remove_flag(ui_listBtn, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
-        lv_obj_set_style_bg_color(ui_listBtn, lv_color_hex(0x909090), LV_PART_MAIN | LV_STATE_DEFAULT);
-        lv_obj_set_style_bg_opa(ui_listBtn, 127, LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_color(ui_listBtn, lv_color_hex(0x333333), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_bg_opa(ui_listBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_set_style_shadow_opa(ui_listBtn, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+        lv_obj_t* ui_listImg = lv_image_create(ui_listBtn);
+        lv_image_set_src(ui_listImg, &ui_img_trash_png);
+        lv_obj_align(ui_listImg, LV_ALIGN_LEFT_MID, -5, 0);
+        lv_obj_add_flag(ui_listImg, LV_OBJ_FLAG_CLICKABLE);   /// Flags
+        lv_obj_remove_flag(ui_listImg, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
+        lv_obj_set_style_image_recolor(ui_listImg, lv_color_hex(0xff0000), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
         lv_obj_t* ui_listBtnLab = lv_label_create(ui_listBtn);
         lv_obj_align(ui_listBtnLab, LV_ALIGN_TOP_LEFT, 32, 0);
@@ -279,8 +301,18 @@ extern "C" void ui_strat_screen_entry(ui_strat_mode_t m, lv_screen_load_anim_t a
         lv_obj_t* switch_btn = lv_switch_create(ui_listBtn);
         lv_obj_align(switch_btn, LV_ALIGN_RIGHT_MID, 0, 0);
 
-        lv_obj_add_event_cb(ui_listBtn, ui_strat_detail_click_cb, LV_EVENT_ALL, NULL);
+        //lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
+        lv_obj_add_event_cb(ui_listImg, ui_strat_detail_delete_cb, LV_EVENT_CLICKED, NULL);
+        lv_obj_add_event_cb(ui_listBtn, ui_strat_detail_click_cb, LV_EVENT_CLICKED, NULL);
+        lv_obj_add_event_cb(switch_btn, ui_strat_detail_switch_cb, LV_EVENT_CLICKED, NULL);
     }
+
+    lv_obj_t* placeholder = lv_obj_create(strat_list[scr_where]);
+    lv_obj_set_size(placeholder, lv_pct(100), lv_pct(30));
+    lv_obj_set_style_bg_opa(placeholder, LV_OPA_TRANSP, LV_PART_MAIN);
+    lv_obj_set_style_border_opa(placeholder, LV_OPA_TRANSP, LV_PART_MAIN);
+    lv_obj_set_style_shadow_width(placeholder, 0, LV_PART_MAIN);
+    lv_obj_remove_flag(placeholder, LV_OBJ_FLAG_CLICKABLE);
 
     if (isEnabled)
     {

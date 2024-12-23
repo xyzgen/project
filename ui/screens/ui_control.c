@@ -133,6 +133,7 @@ void ui_control_screen_init(void)
         lv_obj_set_style_image_recolor_opa(ui_listImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_add_event_cb(ui_listBtn, pos->mod->event, LV_EVENT_ALL, NULL);
     }
+    lv_obj_add_event_cb(ui_control, ui_event_control_back, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_control, ui_event_status, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_control, ui_addBtn_cb, LV_EVENT_SCREEN_LOADED, NULL);
 }
