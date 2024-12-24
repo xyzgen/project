@@ -7,7 +7,7 @@
 #include "ui_helpers.h"
 
 ///////////////////// VARIABLES ////////////////////
-
+static bool pressLock = true;
 
 // SCREEN: ui_standby
 void ui_standby_screen_init(void);
@@ -177,11 +177,22 @@ void ui_event_main(lv_event_t* e) {
 
     if (event_code == LV_EVENT_PRESSED)
     {
-        lv_indev_get_point(lv_event_get_indev(e), &press_p);
+        if (pressLock)
+        {
+            lv_indev_get_point(lv_event_get_indev(e), &press_p);
+            pressLock = !pressLock;
+        }
+        lv_log("press %d %d\n", press_p.x, press_p.y);
+
     }
     if (event_code == LV_EVENT_RELEASED)
     {
-        lv_indev_get_point(lv_event_get_indev(e), &release_p);
+        if (!pressLock)
+        {
+            lv_indev_get_point(lv_event_get_indev(e), &release_p);
+            pressLock = !pressLock;
+        }
+        lv_log("release %d %d\n", release_p.x, release_p.y);
         if (press_p.y >266 && press_p.y - release_p.y> 20)
             _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_main_screen_init);
     }
@@ -200,9 +211,9 @@ void ui_event_temp(lv_event_t* e) {
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        if (press_p.x - release_p.x > 20)
+        if (press_p.x - release_p.x > 20 && press_p.y<266)
             _ui_screen_change(&ui_temp, LV_SCR_LOAD_ANIM_MOVE_LEFT, 500, 0, &ui_temp_screen_init);
-        else if (release_p.x - press_p.x > 20)
+        else if (release_p.x - press_p.x > 20 && press_p.y < 266)
             _ui_screen_change(&ui_QR, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 500, 0, &ui_QR_screen_init);
     }
 }

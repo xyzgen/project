@@ -32,7 +32,7 @@ void ui_temp_screen_init(void)
     lv_obj_set_style_text_font(ui_tempLab, &ui_font_Chinese16B, LV_PART_MAIN);
 
     lv_obj_t* line_obj = lv_line_create(ui_temp);
-
+    lv_obj_add_flag(line_obj, LV_OBJ_FLAG_EVENT_BUBBLE);
     static lv_point_t line_points[] = { {0, 0}, {200, 0} };
     lv_line_set_points(line_obj, line_points, 2);
 
@@ -64,7 +64,7 @@ void ui_temp_screen_init(void)
     lv_chart_set_point_count(ui_tempChart, 24);
 
     ui_tempSeries = lv_chart_add_series(ui_tempChart, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
-    //lv_obj_add_flag(ui_tempSeries, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_add_flag(ui_tempSeries, LV_OBJ_FLAG_EVENT_BUBBLE);
 
 
     lv_obj_add_event_cb(ui_temp, ui_event_main, LV_EVENT_ALL, NULL);
@@ -123,7 +123,7 @@ static void timer_cb(lv_timer_t* timer) {
 static void create_dashed_line(lv_obj_t* scr,int x,int y) {
     // 创建线条对象
     lv_obj_t* line_obj = lv_line_create(scr);
-
+    lv_obj_add_flag(line_obj, LV_OBJ_FLAG_EVENT_BUBBLE);
     // 设置点数组
     static lv_point_t line_points[] = { {0, 0}, {0, 150} };
     lv_line_set_points(line_obj, line_points, 2);
