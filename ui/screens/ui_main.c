@@ -81,7 +81,7 @@ void ui_main_screen_init(void)
     static lv_style_t style_temp;
 
     lv_style_init(&style_temp);
-    lv_style_set_bg_color(&style_temp, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_bg_color(&style_temp, lv_color_hex(0xF0CF14));
 
     ui_tempBar = lv_bar_create(ui_main);
     lv_obj_add_flag(ui_tempBar, LV_OBJ_FLAG_EVENT_BUBBLE);
@@ -90,7 +90,7 @@ void ui_main_screen_init(void)
     lv_obj_align(ui_tempBar, LV_ALIGN_CENTER, 45, 15);
     lv_bar_set_range(ui_tempBar, 0, 60);
     lv_bar_set_value(ui_tempBar, 30, LV_ANIM_ON);
-    lv_obj_set_style_bg_color(ui_tempBar, lv_palette_main(LV_PALETTE_RED), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(ui_tempBar, lv_color_hex(0xF0CF14), LV_PART_MAIN);
     lv_obj_set_style_bg_opa(ui_tempBar, 127, LV_PART_MAIN);
 
     lv_obj_t* tempimg = lv_image_create(ui_main);
@@ -99,7 +99,7 @@ void ui_main_screen_init(void)
     lv_obj_set_width(tempimg, LV_SIZE_CONTENT);  /// 16
     lv_obj_set_height(tempimg, LV_SIZE_CONTENT);   /// 16
     lv_obj_align(tempimg, LV_ALIGN_CENTER, 46, 80);
-    lv_obj_set_style_image_recolor(tempimg, lv_palette_main(LV_PALETTE_RED), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor(tempimg, lv_color_hex(0xF0CF14), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_image_recolor_opa(tempimg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 
@@ -145,7 +145,7 @@ void ui_main_screen_init(void)
     lv_obj_set_style_text_color(ui_mainInfoLab, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_mainInfoLab, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_label_set_text_fmt(ui_mainInfoLab, "温度 %d ℃   水位 %s", 30, "正常");
+    lv_label_set_text_fmt(ui_mainInfoLab, "水泵 %d 档   灯光 %s", 7, "氛围");
 
     lv_obj_add_event_cb(ui_main, ui_event_status, LV_EVENT_ALL, ui_main);
     lv_obj_add_event_cb(ui_main, ui_event_control, LV_EVENT_ALL, NULL);

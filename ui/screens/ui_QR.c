@@ -14,8 +14,13 @@ void ui_QR_screen_init(void)
     lv_obj_remove_flag(ui_QR, LV_OBJ_FLAG_SCROLLABLE);    /// Flags
     lv_obj_set_style_bg_color(ui_QR, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_QR, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_color_t bg_color = lv_palette_lighten(LV_PALETTE_GREY, 5);
+    {
+        lv_obj_t* label = lv_label_create(ui_QR);
+        lv_label_set_text(label, "需要我们为您做些什么?");
+        lv_obj_set_style_text_color(label, lv_color_hex(LANDE), LV_PART_MAIN);
+        lv_obj_set_style_text_font(label, &ui_font_Chinese16B, LV_PART_MAIN);
+        lv_obj_align(label, LV_ALIGN_TOP_LEFT, 16, 16);
+    }
 
     lv_obj_t* tv = lv_tileview_create(ui_QR);
     lv_obj_add_flag(tv, LV_OBJ_FLAG_EVENT_BUBBLE);
@@ -30,10 +35,11 @@ void ui_QR_screen_init(void)
         lv_obj_t* qr = lv_qrcode_create(tile1);
         lv_qrcode_set_size(qr, 150);
         lv_obj_set_size(qr, 150, 150);
-        lv_qrcode_set_light_color(qr, bg_color);
+        lv_qrcode_set_dark_color(qr, lv_color_hex(0xFFFFFF));
+        lv_qrcode_set_light_color(qr, lv_color_hex(0));
         lv_qrcode_update(qr, QR_to[i], strlen(QR_to[i]));
         lv_obj_set_align(qr,LV_ALIGN_TOP_MID);
-        lv_obj_set_style_border_color(qr, bg_color, 0);
+
         lv_obj_set_style_border_width(qr, 5, 0);
         lv_obj_t* label = lv_label_create(tile1);
         lv_label_set_text(label, QR_to[i]);

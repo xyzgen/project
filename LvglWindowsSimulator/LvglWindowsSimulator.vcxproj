@@ -2825,6 +2825,7 @@
     </ClCompile>
     <ClCompile Include="..\ui\components\ui_comp_hook.c" />
     <ClCompile Include="..\ui\fonts\ui_font_Chinese16B.c" />
+    <ClCompile Include="..\ui\fonts\ui_font_Chinese24B.c" />
     <ClCompile Include="..\ui\fonts\ui_font_Chinese32B.c" />
     <ClCompile Include="..\ui\fonts\ui_font_Chinese96.c" />
     <ClCompile Include="..\ui\images\ui_img_aroma_png.c" />

@@ -3932,9 +3932,6 @@
     <ClCompile Include="..\ui\screens\ui_more.c">
       <Filter>lvgl\ui\screens</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\images\ui_img_lamp_png.c">
-      <Filter>lvgl\ui\images</Filter>
-    </ClCompile>
     <ClCompile Include="..\ui\images\ui_img_decom_png.c">
       <Filter>lvgl\ui\images</Filter>
     </ClCompile>
@@ -3952,6 +3949,11 @@
     </ClCompile>
     <ClCompile Include="..\ui\images\ui_img_pump_shell_png.c">
       <Filter>lvgl\ui\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\images\ui_img_trash_png.c" />
+    <ClCompile Include="..\ui\images\ui_img_uv_png.c" />
+    <ClCompile Include="..\ui\fonts\ui_font_Chinese24B.c">
+      <Filter>lvgl\ui\fonts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

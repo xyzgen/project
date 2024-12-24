@@ -22,14 +22,22 @@ void ui_waterLevel_screen_init(void)
     lv_obj_align(ui_lab, LV_ALIGN_TOP_LEFT, 16, 16);
     lv_label_set_text(ui_lab, "水位");
     lv_obj_set_style_text_color(ui_lab, lv_color_hex(LANDE), LV_PART_MAIN);
-    lv_obj_set_style_text_font(ui_lab, &ui_font_Chinese32B, LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui_lab, &ui_font_Chinese24B, LV_PART_MAIN);
+
+    lv_obj_t* ui_levelImg = lv_image_create(ui_waterLevel);
+    lv_obj_add_flag(ui_levelImg, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_image_set_src(ui_levelImg, &ui_img_level_png);
+    lv_image_set_scale(ui_levelImg, 192);
+    lv_obj_align(ui_levelImg, LV_ALIGN_BOTTOM_MID, -16, -9);
+    lv_obj_set_style_image_recolor(ui_levelImg, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui_levelImg, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_waterLevelLab = lv_label_create(ui_waterLevel);
     lv_obj_add_flag(ui_waterLevelLab, LV_OBJ_FLAG_EVENT_BUBBLE);
-    lv_obj_align(ui_waterLevelLab, LV_ALIGN_BOTTOM_MID, 0, -32);
+    lv_obj_align(ui_waterLevelLab, LV_ALIGN_BOTTOM_MID, 16, -16);
     lv_label_set_text(ui_waterLevelLab, "水位 -");
-    lv_obj_set_style_text_color(ui_waterLevelLab, lv_color_hex(LANDE), LV_PART_MAIN);
-    lv_obj_set_style_text_font(ui_waterLevelLab, &ui_font_Chinese32B, LV_PART_MAIN);
+    lv_obj_set_style_text_color(ui_waterLevelLab, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+    lv_obj_set_style_text_font(ui_waterLevelLab, &ui_font_Chinese16B, LV_PART_MAIN);
 
     lv_obj_add_event_cb(ui_waterLevel, ui_event_main, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_waterLevel, ui_event_waterPump, LV_EVENT_ALL, NULL);

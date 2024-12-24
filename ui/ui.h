@@ -91,6 +91,7 @@ void ui_more_screen_init(void);
 void ui_event_more(lv_event_t* e);
 extern lv_obj_t* ui_more;
 extern lv_obj_t* ui_moreList;
+extern lv_obj_t* ui_interfaceRoller;
 
 // SCREEN: ui_temp
 void ui_temp_screen_init(void);
@@ -167,8 +168,8 @@ LV_IMG_DECLARE(ui_img_trash_png);
 //LV_FONT_DECLARE( ui_font_Chinese10);
 //LV_FONT_DECLARE( ui_font_Chinese12);
 //LV_FONT_DECLARE( ui_font_Chinese14);
-//LV_FONT_DECLARE( ui_font_Chinese16);
 LV_FONT_DECLARE( ui_font_Chinese16B);
+LV_FONT_DECLARE(ui_font_Chinese24B);
 LV_FONT_DECLARE( ui_font_Chinese32B);
 //LV_FONT_DECLARE(ui_font_Chinese32);
 //LV_FONT_DECLARE( ui_font_Chinese8);

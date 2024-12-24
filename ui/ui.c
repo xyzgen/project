@@ -61,6 +61,7 @@ void ui_more_screen_init(void);
 void ui_event_more(lv_event_t* e);
 lv_obj_t* ui_more;
 lv_obj_t* ui_moreList;
+lv_obj_t* ui_interfaceRoller;
 
 // SCREEN: ui_temp
 void ui_temp_screen_init(void);
@@ -69,7 +70,6 @@ lv_obj_t* ui_tempLab;
 lv_obj_t* ui_temp_ave_Lab;
 lv_obj_t* ui_tempChart;
 lv_obj_t* ui_tempSeries;
-lv_obj_t* ui_tempChart_Yaxis;
 
 
 // SCREEN: ui_waterLevel
@@ -178,13 +178,10 @@ void ui_event_main(lv_event_t* e) {
     if (event_code == LV_EVENT_PRESSED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &press_p);
-        lv_log("%d %d\n", press_p.x, press_p.y);
-
     }
     if (event_code == LV_EVENT_RELEASED)
     {
         lv_indev_get_point(lv_event_get_indev(e), &release_p);
-        lv_log("%d %d\n", release_p.x, release_p.y);
         if (press_p.y >266 && press_p.y - release_p.y> 20)
             _ui_screen_change(&ui_main, LV_SCR_LOAD_ANIM_MOVE_TOP, 500, 0, &ui_main_screen_init);
     }
